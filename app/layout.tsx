@@ -6,8 +6,8 @@ import { Nav } from "@/components/Nav";
 import { cn } from "@/utils";
 
 export const metadata: Metadata = {
-  title: "Hume AI - EVI - Next.js Starter",
-  description: "A Next.js starter using Hume AI's Empathic Voice Interface",
+  title: "Sarcasm-as-a-Service",
+  description: "A service that humorously delivers and detects sarcasm.",
 };
 
 export default function RootLayout({

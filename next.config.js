@@ -1,6 +1,6 @@
 module.exports = {
-  basePath: '/hume-api-examples',
-  assetPrefix: '/hume-api-examples/',
-  output: 'export',
+  basePath: '',
+  assetPrefix: '',
+  // Removing the 'output: export' setting to support API routes
   // ...existing config...
 };

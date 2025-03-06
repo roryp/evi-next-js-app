@@ -3,13 +3,15 @@ import { cn } from "@/utils";
 import { useVoice } from "@humeai/voice-react";
 import Expressions from "./Expressions";
 import { AnimatePresence, motion } from "framer-motion";
-import { ComponentRef, forwardRef } from "react";
+import { ComponentRef, forwardRef, useContext } from "react";
+import { SarcasmParametersContext } from "./Chat";
 
 const Messages = forwardRef<
   ComponentRef<typeof motion.div>,
   Record<never, never>
 >(function Messages(_, ref) {
   const { messages } = useVoice();
+  const { parameters } = useContext(SarcasmParametersContext);
 
   return (
     <motion.div
@@ -56,7 +58,10 @@ const Messages = forwardRef<
                     {msg.message.role}
                   </div>
                   <div className={"pb-3 px-3"}>{msg.message.content}</div>
-                  <Expressions values={msg.models.prosody?.scores} />
+                  <Expressions 
+                    values={msg.models.prosody?.scores}
+                    sarcasmParameters={parameters} 
+                  />
                 </motion.div>
               );
             }
