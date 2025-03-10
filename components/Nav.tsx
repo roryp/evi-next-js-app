@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { Moon, Sun, Wand2 } from "lucide-react";
+import { Moon, Sun, Wand2, MessageSquarePlus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -50,6 +50,18 @@ export const Nav = () => {
           <Link href="/sarcasm-detector">
             <Wand2 className="size-4" /> 
             Sarcasm Detector
+          </Link>
+        </Button>
+
+        <Button
+          variant={pathname === "/sarcasm-creator" ? "default" : "ghost"}
+          size="sm"
+          asChild
+          className="flex items-center gap-1.5"
+        >
+          <Link href="/sarcasm-creator">
+            <MessageSquarePlus className="size-4" /> 
+            Sarcasm Creator
           </Link>
         </Button>
       </div>
