@@ -208,6 +208,31 @@ This application contains API routes that require a server runtime to function p
 
 > **Important**: If you want to deploy this app as a static export (e.g., to GitHub Pages), note that the API routes (including sarcasm detection features) will not work as they require a server. In that case, you would need to modify the application to use client-side API calls or a separate backend service.
 
+### Azure Deployment
+
+To deploy this application to Azure Container Apps, follow these steps:
+
+1. **Build and Push Docker Image**:
+   - Open a terminal and navigate to the project directory.
+   - Run the following command to build and push the Docker image to Azure Container Registry (ACR):
+     ```bash
+     ./deploy-to-azure.sh
+     ```
+   - For Windows users, use the PowerShell script:
+     ```powershell
+     ./deploy-to-azure.ps1
+     ```
+
+2. **Access Your Application**:
+   - After the deployment script completes, your application will be available at the URL provided in the script output.
+   - The URL will be in the format: `https://<CONTAINER_APP_NAME>.<defaultDomain>`
+
+### Prerequisites for Azure Deployment
+
+- Ensure you have the Azure CLI installed and logged in.
+- Customize the variables in the deployment script (`deploy-to-azure.sh` or `deploy-to-azure.ps1`) as needed.
+- Make sure your Azure subscription has the necessary permissions to create resources like Container Registry and Container Apps.
+
 ### Troubleshooting
 
 - **API routes not working in production**: Ensure that `output: 'export'` is removed from `next.config.js` to support API routes.

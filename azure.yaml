@@ -1,0 +1,8 @@
+name: evi-next-js-app
+services:
+  app:
+    language: node
+    project: .
+    host: containerapp
+    docker:
+      path: ./Dockerfile
