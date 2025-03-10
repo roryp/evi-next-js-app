@@ -121,6 +121,24 @@ To use the Sarcasm Detector:
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
+### Sarcasm Creator Feature
+
+The application now includes a Sarcasm Creator feature that allows users to generate sarcastic responses based on input text. This feature leverages advanced natural language processing models to craft responses that mimic human sarcasm.
+
+#### How to Use the Sarcasm Creator
+
+1. Navigate to the "Sarcasm Creator" page using the navigation bar.
+2. Enter the text for which you want to generate a sarcastic response.
+3. Click the "Generate Sarcasm" button.
+4. Review the generated sarcastic response displayed on the page.
+
+The Sarcasm Creator provides a fun and interactive way to explore the nuances of sarcastic language. It can be used for entertainment, educational purposes, or to enhance conversational AI systems.
+
+**Note:** The Sarcasm Creator requires an OpenAI API key. Ensure that this is added to your `.env.local` file:
+```
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
 ## Getting Started
 
 ### Prerequisites
