@@ -208,6 +208,37 @@ This application contains API routes that require a server runtime to function p
 
 > **Important**: If you want to deploy this app as a static export (e.g., to GitHub Pages), note that the API routes (including sarcasm detection features) will not work as they require a server. In that case, you would need to modify the application to use client-side API calls or a separate backend service.
 
+### Running the Docker Image Locally
+
+To build and run the Docker image locally, follow these steps:
+
+1. **Build the Docker Image**:
+   Open a terminal and navigate to the project directory. Run the following command to build the Docker image:
+   ```bash
+   docker build -t evi-next-js-app .
+   ```
+
+2. **Run the Docker Container**:
+   Run the Docker container with the necessary environment variables. Replace `your_openai_api_key_here` and `your_hume_api_key_here` with your actual API keys:
+   ```bash
+   docker run -p 3000:3000 -e OPENAI_API_KEY=your_openai_api_key_here -e HUME_API_KEY=your_hume_api_key_here evi-next-js-app
+   ```
+
+This will start the Docker container and map port 3000 of the container to port 3000 on your local machine. You can then access the application at [http://localhost:3000](http://localhost:3000).
+
+### Summary of Commands:
+1. Build the Docker image:
+   ```bash
+   docker build -t evi-next-js-app .
+   ```
+
+2. Run the Docker container with environment variables:
+   ```bash
+   docker run -p 3000:3000 -e OPENAI_API_KEY=your_openai_api_key_here -e HUME_API_KEY=your_hume_api_key_here evi-next-js-app
+   ```
+
+This setup ensures that the necessary environment variables are available to the application when it runs inside the Docker container.
+
 ### Azure Deployment
 
 To deploy this application to Azure Container Apps, follow these steps:

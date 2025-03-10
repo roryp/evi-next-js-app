@@ -14,7 +14,9 @@ RUN pnpm install --frozen-lockfile
 # Build the app
 FROM dependencies AS build
 COPY . .
-RUN pnpm build
+RUN --mount=type=secret,id=openai_api_key \
+    export OPENAI_API_KEY=$(cat /run/secrets/openai_api_key) && \
+    pnpm build
 
 # Production image
 FROM base AS runner
@@ -22,6 +24,12 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=3000
+
+# Set build arguments
+ARG OPENAI_API_KEY
+
+# Set environment variables
+ENV OPENAI_API_KEY=$OPENAI_API_KEY
 
 # Copy necessary files from build stage
 COPY --from=build /app/next.config.js ./
