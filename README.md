@@ -139,6 +139,30 @@ The Sarcasm Creator provides a fun and interactive way to explore the nuances of
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
+### Required API Keys
+
+Before running the application, you need to create the following files in the root directory:
+
+1. `openai_api_key.txt`:
+   - Create this file and paste your OpenAI API key
+   - This is required for sarcasm detection and generation features
+
+2. `hume_api_key.txt`:
+   - Create this file and paste your Hume API key
+   - Required for emotion analysis features
+
+3. `hume_secret_key.txt`:
+   - Create this file and paste your Hume secret key
+   - Required for authentication with Hume API
+
+These files are used both in development and when building the Docker container. Alternatively, you can set these as environment variables in a `.env.local` file:
+
+```
+OPENAI_API_KEY=your_openai_api_key_here
+HUME_API_KEY=your_hume_api_key_here
+HUME_SECRET_KEY=your_hume_secret_key_here
+```
+
 ## Getting Started
 
 ### Prerequisites
@@ -166,6 +190,7 @@ OPENAI_API_KEY=your_openai_api_key_here
    ```
    HUME_API_KEY=your_hume_api_key_here
    OPENAI_API_KEY=your_openai_api_key_here
+   HUME_SECRET_KEY=your_hume_secret_key_here
    ```
 
 ### Development
@@ -215,7 +240,7 @@ To build and run the Docker image locally, follow these steps:
 1. **Build the Docker Image**:
    Open a terminal and navigate to the project directory. Run the following command to build the Docker image:
    ```bash
-   docker build -t evi-next-js-app .
+   docker build -t evi-next-js-app . 
    ```
 
 2. **Run the Docker Container**:
@@ -229,7 +254,7 @@ This will start the Docker container and map port 3000 of the container to port 
 ### Summary of Commands:
 1. Build the Docker image:
    ```bash
-   docker build -t evi-next-js-app .
+   docker build -t evi-next-js-app . 
    ```
 
 2. Run the Docker container with environment variables:
