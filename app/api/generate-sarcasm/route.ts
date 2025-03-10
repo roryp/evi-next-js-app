@@ -60,7 +60,7 @@ Remember: Respond with ONLY the sarcastic version, nothing else.`;
 
     // Call the OpenAI API using GPT-4.5-Preview
     const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview", // Using the latest GPT-4 preview model
+      model: "gpt-4.5-preview", // Using the latest GPT-4.5 preview model
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt }
