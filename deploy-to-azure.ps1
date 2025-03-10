@@ -6,6 +6,7 @@ $CONTAINER_APP_NAME = "evi-next-js-app"
 $CONTAINER_APP_ENV_NAME = "evi-next-js-app-env"
 $IMAGE_NAME = "evi-next-js-app"
 $IMAGE_TAG = "latest"
+$OPENAI_API_KEY = "your_openai_api_key_here"
 
 Write-Host "🚀 Creating Azure Container Registry if it doesn't exist..." -ForegroundColor Cyan
 az acr create --name $ACR_NAME --resource-group $RESOURCE_GROUP --location $LOCATION --sku Basic --admin-enabled true
@@ -44,7 +45,8 @@ az containerapp create `
   --target-port 3000 `
   --ingress external `
   --min-replicas 1 `
-  --max-replicas 10
+  --max-replicas 10 `
+  --env-vars OPENAI_API_KEY=$OPENAI_API_KEY
 
 Write-Host "🎉 Deployment complete! Your app should be available soon at:" -ForegroundColor Green
 $domain = az containerapp env show -n $CONTAINER_APP_ENV_NAME -g $RESOURCE_GROUP --query 'properties.defaultDomain' -o tsv

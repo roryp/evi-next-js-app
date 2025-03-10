@@ -2,6 +2,12 @@ const { createServer } = require('http');
 const { parse } = require('url');
 const next = require('next');
 
+// Check for OPENAI_API_KEY environment variable
+if (!process.env.OPENAI_API_KEY) {
+  console.error('Error: The OPENAI_API_KEY environment variable is missing or empty.');
+  process.exit(1);
+}
+
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
