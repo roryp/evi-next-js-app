@@ -43,20 +43,23 @@ Always respond ONLY with the sarcastic version - no explanations, no extra comme
     // Create a user prompt with the parameters
     const userPrompt = `Transform the following text into a sarcastic response.
 
-Apply these sarcasm styles (ordered by importance weight):
-${enabledStyles.sort((a, b) => b.weight - a.weight)
-  .map(style => `- ${style.name} (${(style.weight * 100).toFixed(0)}%): ${style.description}`)
-  .join('\n')}
+  Apply these sarcasm styles (ordered by importance weight):
+  ${enabledStyles.sort((a, b) => b.weight - a.weight)
+    .map(style => `- ${style.name} (${(style.weight * 100).toFixed(0)}%): ${style.description}`)
+    .join('\n')}
 
-Apply these tone settings:
-- Intensity: ${(toneSettings.intensity * 100).toFixed(0)}% (higher = stronger sarcasm)
-- Humor: ${(toneSettings.humor * 100).toFixed(0)}% (higher = funnier)
-- Harshness: ${(toneSettings.harshness * 100).toFixed(0)}% (higher = more cutting)
-- Subtlety: ${(toneSettings.subtlety * 100).toFixed(0)}% (higher = more subtle)
+  Apply these tone settings:
+  - Intensity: ${(toneSettings.intensity * 100).toFixed(0)}% (higher = stronger sarcasm)
+  - Humor: ${(toneSettings.humor * 100).toFixed(0)}% (higher = funnier)
+  - Harshness: ${(toneSettings.harshness * 100).toFixed(0)}% (higher = more cutting)
+  - Subtlety: ${(toneSettings.subtlety * 100).toFixed(0)}% (higher = more subtle)
 
-Original text to transform: "${text}"
+  Original text to transform: "${text}"
 
-Remember: Respond with ONLY the sarcastic version, nothing else.`;
+  Remember: Respond with ONLY the sarcastic version, nothing else.`;
+
+    // Log the prompt to the console
+    console.log('Generated OpenAI Prompt:', userPrompt);
 
     // Call the OpenAI API using GPT-4.5-Preview
     const completion = await openai.chat.completions.create({
