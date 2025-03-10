@@ -19,13 +19,14 @@ FROM dependencies AS build
 # Copy the rest of the application
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-# Set environment variables
-RUN export OPENAI_API_KEY=$(cat openai_api_key.txt) && \
-    export HUME_API_KEY=$(cat hume_api_key.txt) && \
-    export HUME_SECRET_KEY=$(cat hume_secret_key.txt) && \
-    echo "OPENAI_API_KEY=$(cat openai_api_key.txt)" > .env && \
-    echo "HUME_API_KEY=$(cat hume_api_key.txt)" >> .env && \
-    echo "HUME_SECRET_KEY=$(cat hume_secret_key.txt)" >> .env
+
+# Define secrets mounts
+RUN --mount=type=secret,id=openai_key \
+    --mount=type=secret,id=hume_key \
+    --mount=type=secret,id=hume_secret \
+    echo "OPENAI_API_KEY=$(cat /run/secrets/openai_key)" > .env && \
+    echo "HUME_API_KEY=$(cat /run/secrets/hume_key)" >> .env && \
+    echo "HUME_SECRET_KEY=$(cat /run/secrets/hume_secret)" >> .env
 
 # Production image
 FROM base AS runner
@@ -41,14 +42,6 @@ COPY --from=build /app/ ./
 
 # Make sure we have all dependencies including dev dependencies
 RUN pnpm install --frozen-lockfile
-
-# Make sure environment variables are set in the runtime environment
-RUN export OPENAI_API_KEY=$(cat openai_api_key.txt) && \
-    export HUME_API_KEY=$(cat hume_api_key.txt) && \
-    export HUME_SECRET_KEY=$(cat hume_secret_key.txt) && \
-    echo "OPENAI_API_KEY=$(cat openai_api_key.txt)" > .env && \
-    echo "HUME_API_KEY=$(cat hume_api_key.txt)" >> .env && \
-    echo "HUME_SECRET_KEY=$(cat hume_secret_key.txt)" >> .env
 
 # Expose port
 EXPOSE 3000

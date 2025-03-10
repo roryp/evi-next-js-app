@@ -237,32 +237,80 @@ This application contains API routes that require a server runtime to function p
 
 To build and run the Docker image locally, follow these steps:
 
-1. **Build the Docker Image**:
-   Open a terminal and navigate to the project directory. Run the following command to build the Docker image:
+1. **Build the Docker Image with Docker Secrets (Recommended)**:
+   
+   The Dockerfile is configured to use Docker secrets for secure handling of API keys. This is the most secure approach as it prevents API keys from being stored in image layers:
+
    ```bash
-   docker build -t evi-next-js-app . 
+   docker build \
+     --secret id=openai_key,src=openai_api_key.txt \
+     --secret id=hume_key,src=hume_api_key.txt \
+     --secret id=hume_secret,src=hume_secret_key.txt \
+     -t evi-next-js-app .
+   ```
+
+   On Windows PowerShell:
+   ```powershell
+   docker build `
+     --secret id=openai_key,src=openai_api_key.txt `
+     --secret id=hume_key,src=hume_api_key.txt `
+     --secret id=hume_secret,src=hume_secret_key.txt `
+     -t evi-next-js-app .
    ```
 
 2. **Run the Docker Container**:
-   Run the Docker container with the necessary environment variables. Replace `your_openai_api_key_here` and `your_hume_api_key_here` with your actual API keys:
+   Run the Docker container with the necessary environment variables:
    ```bash
-   docker run -p 3000:3000 -e OPENAI_API_KEY=your_openai_api_key_here -e HUME_API_KEY=your_hume_api_key_here evi-next-js-app
+   docker run -p 3000:3000 \
+     -e OPENAI_API_KEY="$(cat openai_api_key.txt)" \
+     -e HUME_API_KEY="$(cat hume_api_key.txt)" \
+     -e HUME_SECRET_KEY="$(cat hume_secret_key.txt)" \
+     evi-next-js-app
    ```
 
-This will start the Docker container and map port 3000 of the container to port 3000 on your local machine. You can then access the application at [http://localhost:3000](http://localhost:3000).
-
-### Summary of Commands:
-1. Build the Docker image:
-   ```bash
-   docker build -t evi-next-js-app . 
+   On Windows PowerShell:
+   ```powershell
+   docker run -p 3000:3000 `
+     -e OPENAI_API_KEY="$(Get-Content openai_api_key.txt)" `
+     -e HUME_API_KEY="$(Get-Content hume_api_key.txt)" `
+     -e HUME_SECRET_KEY="$(Get-Content hume_secret_key.txt)" `
+     evi-next-js-app
    ```
 
-2. Run the Docker container with environment variables:
-   ```bash
-   docker run -p 3000:3000 -e OPENAI_API_KEY=your_openai_api_key_here -e HUME_API_KEY=your_hume_api_key_here evi-next-js-app
-   ```
+   This will start the Docker container and map port 3000 of the container to port 3000 on your local machine. You can then access the application at [http://localhost:3000](http://localhost:3000).
 
-This setup ensures that the necessary environment variables are available to the application when it runs inside the Docker container.
+### In Production Environments
+
+For production deployments, instead of using local files, you should use your deployment platform's secret management system:
+
+1. Store your API keys in your cloud provider's secret manager (Azure KeyVault, AWS Secrets Manager, etc.)
+2. Inject the secrets at build time using your CI/CD pipeline
+3. Configure environment variables for runtime in your deployment configuration
+
+For example, in a GitHub Actions workflow:
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Build Docker image with secrets
+        run: |
+          echo "${{ secrets.OPENAI_API_KEY }}" > openai_key.txt
+          echo "${{ secrets.HUME_API_KEY }}" > hume_key.txt
+          echo "${{ secrets.HUME_SECRET_KEY }}" > hume_secret.txt
+          
+          docker build \
+            --secret id=openai_key,src=openai_key.txt \
+            --secret id=hume_key,src=hume_key.txt \
+            --secret id=hume_secret,src=hume_secret.txt \
+            -t myapp:latest .
+            
+          # Clean up temporary files
+          rm openai_key.txt hume_key.txt hume_secret.txt
+```
 
 ### Azure Deployment
 
