@@ -41,3 +41,5 @@ next-env.d.ts
 .vscode/settings.json
 .deployment
 openai_api_key.txt
+hume_api_key.txt
+hume_secret_key.txt

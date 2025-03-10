@@ -8,39 +8,50 @@ WORKDIR /app
 
 # Install dependencies
 FROM base AS dependencies
+# Copy package configs first
 COPY package.json pnpm-lock.yaml ./
+COPY postcss.config.mjs tailwind.config.ts ./
+# Install all dependencies including devDependencies
 RUN pnpm install --frozen-lockfile
 
 # Build the app
 FROM dependencies AS build
+# Copy the rest of the application
 COPY . .
-RUN --mount=type=secret,id=openai_api_key \
-    export OPENAI_API_KEY=$(cat /run/secrets/openai_api_key) && \
-    pnpm build
+ENV NEXT_TELEMETRY_DISABLED=1
+# Set environment variables
+RUN export OPENAI_API_KEY=$(cat openai_api_key.txt) && \
+    export HUME_API_KEY=$(cat hume_api_key.txt) && \
+    export HUME_SECRET_KEY=$(cat hume_secret_key.txt) && \
+    echo "OPENAI_API_KEY=$(cat openai_api_key.txt)" > .env && \
+    echo "HUME_API_KEY=$(cat hume_api_key.txt)" >> .env && \
+    echo "HUME_SECRET_KEY=$(cat hume_secret_key.txt)" >> .env
 
 # Production image
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
-ENV PORT=3000
-
-# Set build arguments
-ARG OPENAI_API_KEY
-
 # Set environment variables
-ENV OPENAI_API_KEY=$OPENAI_API_KEY
+ENV NODE_ENV=development
+ENV PORT=3000
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Copy necessary files from build stage
-COPY --from=build /app/next.config.js ./
-COPY --from=build /app/public ./public
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/server.js ./server.js
-COPY --from=build /app/.next ./.next
-COPY --from=build /app/node_modules ./node_modules
+# Copy all files from build stage
+COPY --from=build /app/ ./
 
-# Expose the port the app will run on
+# Make sure we have all dependencies including dev dependencies
+RUN pnpm install --frozen-lockfile
+
+# Make sure environment variables are set in the runtime environment
+RUN export OPENAI_API_KEY=$(cat openai_api_key.txt) && \
+    export HUME_API_KEY=$(cat hume_api_key.txt) && \
+    export HUME_SECRET_KEY=$(cat hume_secret_key.txt) && \
+    echo "OPENAI_API_KEY=$(cat openai_api_key.txt)" > .env && \
+    echo "HUME_API_KEY=$(cat hume_api_key.txt)" >> .env && \
+    echo "HUME_SECRET_KEY=$(cat hume_secret_key.txt)" >> .env
+
+# Expose port
 EXPOSE 3000
 
-# Start the app
-CMD ["node", "server.js"]
+# Start in dev mode to avoid build issues with static generation
+CMD ["pnpm", "dev"]
