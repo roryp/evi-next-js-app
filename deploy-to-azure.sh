@@ -9,7 +9,11 @@ CONTAINER_APP_NAME="evi-next-js-app"
 CONTAINER_APP_ENV_NAME="evi-next-js-app-env"
 IMAGE_NAME="evi-next-js-app"
 IMAGE_TAG="latest"
-OPENAI_API_KEY="your_openai_api_key_here"
+
+# Read API keys from files
+OPENAI_API_KEY=$(cat openai_api_key.txt)
+HUME_API_KEY=$(cat hume_api_key.txt)
+HUME_SECRET_KEY=$(cat hume_secret_key.txt)
 
 echo "🚀 Creating Azure Container Registry if it doesn't exist..."
 az acr create --name $ACR_NAME --resource-group $RESOURCE_GROUP --location $LOCATION --sku Basic --admin-enabled true
@@ -18,8 +22,11 @@ echo "🔑 Getting ACR credentials..."
 ACR_USERNAME=$(az acr credential show --name $ACR_NAME --query username -o tsv)
 ACR_PASSWORD=$(az acr credential show --name $ACR_NAME --query passwords[0].value -o tsv)
 
-echo "🏗️ Building Docker image..."
-docker build -t $IMAGE_NAME:$IMAGE_TAG .
+echo "🏗️ Building Docker image with secrets..."
+docker build -t $IMAGE_NAME:$IMAGE_TAG \
+  --secret id=openai_key,src=openai_api_key.txt \
+  --secret id=hume_key,src=hume_api_key.txt \
+  --secret id=hume_secret,src=hume_secret_key.txt .
 
 echo "🏷️ Tagging Docker image for ACR..."
 docker tag $IMAGE_NAME:$IMAGE_TAG $ACR_NAME.azurecr.io/$IMAGE_NAME:$IMAGE_TAG
@@ -49,7 +56,10 @@ az containerapp create \
   --ingress external \
   --min-replicas 1 \
   --max-replicas 10 \
-  --env-vars OPENAI_API_KEY=$OPENAI_API_KEY
+  --env-vars \
+    OPENAI_API_KEY=$OPENAI_API_KEY \
+    HUME_API_KEY=$HUME_API_KEY \
+    HUME_SECRET_KEY=$HUME_SECRET_KEY
 
 echo "🎉 Deployment complete! Your app should be available soon at:"
 echo "https://$CONTAINER_APP_NAME.$(az containerapp env show -n $CONTAINER_APP_ENV_NAME -g $RESOURCE_GROUP --query 'properties.defaultDomain' -o tsv)"
