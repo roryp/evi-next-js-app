@@ -2,7 +2,7 @@ import { SarcasmCreator } from "@/components/sarcasm-creator/SarcasmCreator";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sarcasm Creator | GPT-4.5",
+  title: "Sarcasm Creator | GPT-4o",
   description: "Generate sarcastic responses using AI",
 };
 

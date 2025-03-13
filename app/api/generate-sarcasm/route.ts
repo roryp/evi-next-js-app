@@ -63,7 +63,7 @@ Always respond ONLY with the sarcastic version - no explanations, no extra comme
 
     // Call the OpenAI API using GPT-4.5-Preview
     const completion = await openai.chat.completions.create({
-      model: "gpt-4.5-preview", // Using the latest GPT-4.5 preview model
+      model: "gpt-4o", // Using the gpt 4o preview model
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt }

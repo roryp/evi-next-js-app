@@ -43,3 +43,4 @@ next-env.d.ts
 openai_api_key.txt
 hume_api_key.txt
 hume_secret_key.txt
+script.txt
