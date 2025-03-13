@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     }
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",  // Using gpt-4o as a current alternative to gpt-4.5-preview
+      model: "gpt-4o",  // Using gpt-4o
       messages: [
         { 
           role: 'system', 

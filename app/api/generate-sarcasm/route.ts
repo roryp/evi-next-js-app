@@ -61,7 +61,7 @@ Always respond ONLY with the sarcastic version - no explanations, no extra comme
     // Log the prompt to the console
     console.log('Generated OpenAI Prompt:', userPrompt);
 
-    // Call the OpenAI API using GPT-4.5-Preview
+    // Call the OpenAI API using GPT-4o
     const completion = await openai.chat.completions.create({
       model: "gpt-4o", // Using the gpt 4o preview model
       messages: [
@@ -92,7 +92,7 @@ Always respond ONLY with the sarcastic version - no explanations, no extra comme
     const fallbackResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
     return NextResponse.json({ 
       response: fallbackResponse,
-      error: "Failed to connect to GPT-4.5" 
+      error: "Failed to connect to GPT-4o" 
     }, { status: 500 });
   }
 }
