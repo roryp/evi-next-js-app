@@ -2,9 +2,9 @@
 set -e
 
 # Variables - customize these
-ACR_NAME="evinextjsappregistry"
-RESOURCE_GROUP="evi-next-js-app-rg"
-LOCATION="eastus"
+ACR_NAME="sarcasmvsrpza"
+RESOURCE_GROUP="sarcastic"
+LOCATION="eastus2"
 CONTAINER_APP_NAME="evi-next-js-app"
 CONTAINER_APP_ENV_NAME="evi-next-js-app-env"
 IMAGE_NAME="evi-next-js-app"
