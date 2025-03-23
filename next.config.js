@@ -1,12 +1,19 @@
 module.exports = {
   basePath: '',
   assetPrefix: process.env.NODE_ENV === 'production' ? undefined : '',
-  output: 'standalone',  // Enable standalone output mode
+  output: 'export',  // Change to static export
   experimental: {
-    outputFileTracingRoot: undefined // Let Next.js detect the monorepo root
+    appDir: true,
+    serverActions: true
   },
   images: {
-    unoptimized: true, // This helps with image display in static export scenarios
-    domains: [],       // Add any external domains you're loading images from
+    unoptimized: true,
+    domains: [],
+  },
+  // Avoid symlinks in build output
+  webpack: (config, { isServer }) => {
+    config.resolve = config.resolve || {};
+    config.resolve.symlinks = false;
+    return config;
   }
 };
