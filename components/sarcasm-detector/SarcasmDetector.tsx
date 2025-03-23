@@ -13,6 +13,13 @@ export function SarcasmDetector() {
   const [result, setResult] = useState<string>("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+  const handleTabChange = (tab: TabType) => {
+    if (!isAnalyzing) {
+      setActiveTab(tab);
+      setResult("");
+    }
+  };
+
   return (
     <div className="container mx-auto p-6 max-w-4xl">
       <h1 className="text-3xl font-bold text-center mb-6">Sarcasm Detector</h1>
@@ -21,25 +28,28 @@ export function SarcasmDetector() {
         <div className="flex border-b border-border">
           <Button
             variant={activeTab === "text" ? "default" : "ghost"}
-            onClick={() => setActiveTab("text")}
+            onClick={() => handleTabChange("text")}
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary px-4 py-2"
             data-state={activeTab === "text" ? "active" : ""}
+            disabled={isAnalyzing}
           >
             Text Analysis
           </Button>
           <Button
             variant={activeTab === "webcam" ? "default" : "ghost"}
-            onClick={() => setActiveTab("webcam")}
+            onClick={() => handleTabChange("webcam")}
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary px-4 py-2"
             data-state={activeTab === "webcam" ? "active" : ""}
+            disabled={isAnalyzing}
           >
             Webcam Analysis
           </Button>
           <Button
             variant={activeTab === "audio" ? "default" : "ghost"}
-            onClick={() => setActiveTab("audio")}
+            onClick={() => handleTabChange("audio")}
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary px-4 py-2"
             data-state={activeTab === "audio" ? "active" : ""}
+            disabled={isAnalyzing}
           >
             Audio Analysis
           </Button>
