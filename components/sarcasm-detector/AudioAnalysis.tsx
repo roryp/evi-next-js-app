@@ -9,7 +9,7 @@ interface AudioAnalysisProps {
 }
 
 const MAX_RECORDING_TIME = 30; // Maximum recording time in seconds
-const PROCESSING_TIMEOUT = 30000; // 30 seconds timeout for processing
+const PROCESSING_TIMEOUT = 60000; // Increased from 30 seconds to 60 seconds
 
 export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnalysisProps) {
   const [isRecording, setIsRecording] = useState(false);
@@ -19,6 +19,13 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
   const [spectrogramURL, setSpectrogramURL] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [prosodyData, setProsodyData] = useState<{ 
+    syllableBoundaries: number[],
+    pitchContour: number[],
+    intensity: number[],
+    speechRate: number
+  } | null>(null);
+  const [showProsodyOverlay, setShowProsodyOverlay] = useState(true);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -26,6 +33,8 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
   const audioRef = useRef<HTMLAudioElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const processingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const spectrogramCanvasRef = useRef<HTMLCanvasElement>(null);
+  const prosodyCanvasRef = useRef<HTMLCanvasElement>(null);
 
   // Clean up function
   useEffect(() => {
@@ -156,6 +165,32 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
     }
   };
 
+  // Format analysis text by converting markdown to properly formatted HTML
+  const formatAnalysisText = (text: string): string => {
+    if (!text) return '';
+    
+    // Convert markdown-style paragraphs to HTML paragraphs
+    let formatted = text.replace(/\n\n/g, '</p><p>');
+    
+    // Convert single line breaks within paragraphs to <br>
+    formatted = formatted.replace(/\n/g, '<br>');
+    
+    // Convert bold text
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    formatted = formatted.replace(/__(.*?)__/g, '<strong>$1</strong>');
+    
+    // Convert italic text
+    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    formatted = formatted.replace(/_(.*?)_/g, '<em>$1</em>');
+    
+    // Wrap in paragraph tags if not already
+    if (!formatted.startsWith('<p>')) {
+      formatted = `<p>${formatted}</p>`;
+    }
+    
+    return formatted;
+  };
+
   const analyzeAudio = async () => {
     if (!audioURL) {
       alert('Please record audio first');
@@ -167,6 +202,7 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
       setIsProcessing(true);
       setStatusMessage("Converting and analyzing audio...");
       setSpectrogramURL(null);
+      setProsodyData(null);
 
       // Set a timeout for the entire processing
       processingTimeoutRef.current = setTimeout(() => {
@@ -213,8 +249,34 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
       }
 
       const data = await apiResponse.json();
+      
+      // Format the analysis text for better display
+      if (data.result) {
+        // Parse the existing HTML result
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data.result, 'text/html');
+        
+        // Get transcription and analysis parts
+        const transcriptionPart = doc.querySelector('p:first-child')?.innerHTML || '';
+        const analysisRaw = doc.querySelector('p:nth-child(2)')?.textContent || '';
+        
+        if (analysisRaw.startsWith('<strong>Analysis:</strong>')) {
+          const analysisText = analysisRaw.replace('<strong>Analysis:</strong>', '').trim();
+          const formattedAnalysis = formatAnalysisText(analysisText);
+          
+          // Combine them back with better formatting
+          data.result = `<p>${transcriptionPart}</p><div class="analysis-content">${formattedAnalysis}</div>`;
+        }
+      }
+      
       onAnalysisComplete(data.result);
       handleAudioVisualization(data.spectrogram);
+      
+      // Set prosody data if available
+      if (data.prosody) {
+        setProsodyData(data.prosody);
+      }
+      
       setStatusMessage("Analysis complete.");
       
     } catch (error) {
@@ -317,7 +379,7 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
           
           {spectrogramURL && (
             <div className="mt-4">
-              <h3 className="text-sm font-semibold mb-2">Audio Analysis</h3>
+              <h3 className="text-sm font-semibold mb-2">Audio Analysis with Prosody</h3>
               <div className="border border-border p-2 rounded">
                 {imageError ? (
                   <div className="p-4 bg-red-50 border border-red-200 rounded">
@@ -345,25 +407,54 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
                       onError={() => setImageError(true)}
                     />
                     
-                    {/* Image overlay with legends */}
-                    <div className="absolute top-2 right-2 bg-black/70 text-white text-xs p-2 rounded shadow">
-                      <div className="flex items-center mb-1">
-                        <span className="w-3 h-3 bg-cyan-400 inline-block mr-2"></span>
-                        <span>Waveform (Speech Pattern)</span>
-                      </div>
-                      <div className="flex items-center">
-                        <span className="w-3 h-3 bg-red-500 inline-block mr-2"></span>
-                        <span>Volume/Emphasis</span>
+                    {/* Fixed legend position - now at bottom center as a standalone component */}
+                    <div className="mt-4 flex justify-center">
+                      <div className="inline-flex items-center px-2 py-1 text-xs gap-4 bg-muted rounded-md">
+                        <div className="flex items-center">
+                          <span className="w-3 h-3 bg-cyan-400 inline-block mr-1"></span>
+                          <span>Waveform</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-3 h-3 bg-red-500 inline-block mr-1"></span>
+                          <span>Volume/Emphasis</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-3 h-3 bg-gradient-to-b from-red-400 to-yellow-400 inline-block mr-1"></span>
+                          <span>Word Flow</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-3 h-3 bg-orange-400 inline-block mr-1"></span>
+                          <span>Pitch Contour</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-3 h-3 bg-yellow-400 inline-block mr-1"></span>
+                          <span>Syllable Markers</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 )}
                 
                 <p className="text-xs text-muted-foreground mt-2">
-                  This visualization shows your speech patterns over time.
-                  The cyan waveform shows the audio intensity, while
-                  the red bars indicate volume and potential emphasis in speech.
+                  This visualization shows prosodic features of your speech. The cyan waveform shows the audio intensity,
+                  while the yellow vertical lines mark syllable boundaries. The orange line represents pitch contour,
+                  which is a key indicator of sarcasm when it follows unusual patterns.
                 </p>
+                
+                {prosodyData && (
+                  <div className="mt-2 text-xs">
+                    <details>
+                      <summary className="cursor-pointer text-primary">Prosody Details</summary>
+                      <div className="mt-1 p-2 bg-muted rounded text-xs">
+                        <p><strong>Speech Rate:</strong> {prosodyData.speechRate.toFixed(2)} syllables/second</p>
+                        <p><strong>Syllable Count:</strong> {prosodyData.syllableBoundaries.length}</p>
+                        <p><strong>Prosodic Features:</strong> The visualization shows pitch contour (orange line) and 
+                        syllable boundaries (yellow lines), which are acoustic correlates of voice that help identify 
+                        sarcasm through exaggerated intonation patterns or unexpected emphasis.</p>
+                      </div>
+                    </details>
+                  </div>
+                )}
               </div>
             </div>
           )}
