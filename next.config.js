@@ -1,19 +1,12 @@
-module.exports = {
-  basePath: '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? undefined : '',
-  output: 'export',  // Change to static export
-  experimental: {
-    appDir: true,
-    serverActions: true
-  },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'standalone',
   images: {
-    unoptimized: true,
-    domains: [],
+    unoptimized: true
   },
-  // Avoid symlinks in build output
-  webpack: (config, { isServer }) => {
-    config.resolve = config.resolve || {};
-    config.resolve.symlinks = false;
-    return config;
+  env: {
+    PORT: 3000
   }
 };
+
+module.exports = nextConfig;
