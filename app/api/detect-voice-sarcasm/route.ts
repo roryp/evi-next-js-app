@@ -42,8 +42,8 @@ function normalizeAudioData(audioData: number[]): number[] {
 // Function to generate a spectrogram from audio data
 async function generateSpectrogram(audioBuffer: Buffer): Promise<string> {
   try {
-    // Parse the WAV file
-    const wav = new WaveFile(audioBuffer);
+    // Parse the WAV file - convert Buffer to Uint8Array to fix type issue
+    const wav = new WaveFile(new Uint8Array(audioBuffer));
     
     // Perform basic validation on the WAV file
     if (!wav.fmt || !wav.data) {
@@ -112,24 +112,37 @@ async function generateSpectrogram(audioBuffer: Buffer): Promise<string> {
     ctx.strokeStyle = 'rgba(50, 50, 50, 0.3)';
     ctx.lineWidth = 0.5;
     
-    // Vertical time markers
-    const secondsMarkers = 10;
+    // Calculate total audio duration in seconds (more accurate)
+    const audioDurationSeconds = audioData.length / sampleRate;
+    
+    // Vertical time markers - more deployment-friendly implementation
+    const secondsMarkers = 5; // Reduced number of markers for better visibility
     for (let i = 0; i <= secondsMarkers; i++) {
-      const x = (i / secondsMarkers) * CANVAS_WIDTH;
+      const x = Math.floor((i / secondsMarkers) * CANVAS_WIDTH);
+      
+      // Draw vertical grid line
       ctx.beginPath();
       ctx.moveTo(x, 0);
       ctx.lineTo(x, CANVAS_HEIGHT);
       ctx.stroke();
       
-      // Add time labels
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-      ctx.font = '10px Arial';
-      ctx.fillText(`${(i * (audioData.length / sampleRate) / secondsMarkers).toFixed(1)}s`, x, CANVAS_HEIGHT - 2);
+      // Calculate marker time in seconds (simpler calculation)
+      const markerTimeSeconds = (i * audioDurationSeconds / secondsMarkers).toFixed(1);
+      
+      // Add time labels - More robust text rendering with fallback fonts
+      try {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'; // Brighter text for better visibility
+        ctx.font = '10px sans-serif'; // Using sans-serif instead of Arial for better compatibility
+        ctx.fillText(`${markerTimeSeconds}s`, x + 2, CANVAS_HEIGHT - 5);
+      } catch (err) {
+        console.warn('Error rendering time markers text:', err);
+        // Fallback - don't render text, just the lines
+      }
     }
     
     // Horizontal amplitude markers
     for (let i = 0; i <= 4; i++) {
-      const y = (i / 4) * CANVAS_HEIGHT;
+      const y = Math.floor((i / 4) * CANVAS_HEIGHT);
       ctx.beginPath();
       ctx.moveTo(0, y);
       ctx.lineTo(CANVAS_WIDTH, y);
@@ -177,43 +190,59 @@ async function generateSpectrogram(audioBuffer: Buffer): Promise<string> {
       ctx.fillRect(x, centerY - rmsHeight, 1, rmsHeight * 2);
     }
     
-    // Add legend
-    const legendWidth = 150;
-    const legendHeight = 60;
-    const legendX = CANVAS_WIDTH - legendWidth - 10;
-    const legendY = 10;
+    // Add legend - more robust implementation without text
+    // Instead, we'll create color blocks that the frontend will interpret
+    const legendPadding = 10;
+    const colorBlockSize = 15;
     
-    // Legend background
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-    ctx.fillRect(legendX, legendY, legendWidth, legendHeight);
-    
-    // Legend items
+    // Waveform color block (cyan)
     ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
-    ctx.fillRect(legendX + 10, legendY + 10, 20, 2);
+    ctx.fillRect(
+      CANVAS_WIDTH - colorBlockSize - legendPadding, 
+      legendPadding, 
+      colorBlockSize, 
+      colorBlockSize
+    );
+    
+    // Volume color block (red)
     ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
-    ctx.fillRect(legendX + 10, legendY + 30, 20, 10);
+    ctx.fillRect(
+      CANVAS_WIDTH - colorBlockSize - legendPadding, 
+      legendPadding * 2 + colorBlockSize, 
+      colorBlockSize, 
+      colorBlockSize
+    );
     
-    ctx.fillStyle = 'white';
-    ctx.font = '10px Arial';
-    ctx.fillText('Waveform', legendX + 35, legendY + 13);
-    ctx.fillText('Volume/Emphasis', legendX + 35, legendY + 35);
-    
-    return canvas.toDataURL('image/png');
+    // Convert canvas to base64 string with proper method signature
+    try {
+      // Fix: Use toDataURL without quality parameter for PNG
+      const dataUrl = canvas.toDataURL('image/png');
+      return dataUrl;
+    } catch (err) {
+      console.error('Error converting canvas to data URL:', err);
+      throw new Error('Error generating spectrogram image');
+    }
   } catch (error: any) {
     console.error('Error generating visualization:', error);
     
-    // Create error canvas
-    const errorCanvas = createCanvas(400, 100);
-    const ctx = errorCanvas.getContext('2d');
-    ctx.fillStyle = '#1a1a1a';
-    ctx.fillRect(0, 0, 400, 100);
-    ctx.font = '14px Arial';
-    ctx.fillStyle = 'white';
-    ctx.fillText('Error generating audio visualization', 20, 50);
-    ctx.font = '10px Arial';
-    ctx.fillText(`Error: ${error.message || 'Unknown error'}`, 20, 70);
-    
-    return errorCanvas.toDataURL('image/png');
+    // Create a simpler error canvas with minimal text rendering
+    try {
+      const errorCanvas = createCanvas(400, 100);
+      const ctx = errorCanvas.getContext('2d');
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fillRect(0, 0, 400, 100);
+      
+      // Add simple error indicator without text
+      ctx.fillStyle = 'red';
+      ctx.fillRect(50, 30, 300, 40);
+      
+      // Fix: Use toDataURL without quality parameter
+      return errorCanvas.toDataURL('image/png');
+    } catch (fallbackErr) {
+      console.error('Even error canvas failed:', fallbackErr);
+      // Last resort: return a static error image URL 
+      return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAB4CAYAAADc36X0AAAAa0lEQVR42u3BAQEAAACCIP+vbkhAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAL8G8aggAZCJvR4AAAAASUVORK5CYII=';
+    }
   }
 }
 
@@ -243,7 +272,7 @@ export async function POST(request: Request) {
     
     try {
       // Write the audio data to a file
-      await writeFile(tempFilePath, audioBuffer);
+      await writeFile(tempFilePath, new Uint8Array(audioBuffer));
       
       // Generate spectrogram from audio data
       const spectrogram = await generateSpectrogram(audioBuffer);

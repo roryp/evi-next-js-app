@@ -18,6 +18,7 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
   const [statusMessage, setStatusMessage] = useState("Ready to record");
   const [spectrogramURL, setSpectrogramURL] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [imageError, setImageError] = useState(false);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -137,6 +138,7 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
 
   const handleAudioVisualization = (spectrogramURL: string | null) => {
     if (spectrogramURL) {
+      setImageError(false);
       // Pre-load the image to ensure it's ready before displaying
       const img = new Image();
       img.onload = () => {
@@ -144,11 +146,13 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
       };
       img.onerror = () => {
         console.error('Failed to load audio visualization');
-        setSpectrogramURL(null);
+        setImageError(true);
+        setSpectrogramURL(spectrogramURL); // Still set the URL for retry attempts
       };
       img.src = spectrogramURL;
     } else {
       setSpectrogramURL(null);
+      setImageError(false);
     }
   };
 
@@ -315,12 +319,46 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
             <div className="mt-4">
               <h3 className="text-sm font-semibold mb-2">Audio Analysis</h3>
               <div className="border border-border p-2 rounded">
-                <img 
-                  src={spectrogramURL} 
-                  alt="Audio Analysis" 
-                  className="max-w-full h-auto"
-                  style={{ imageRendering: 'pixelated' }}
-                />
+                {imageError ? (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded">
+                    <p className="text-red-500 text-sm">
+                      Unable to load visualization. 
+                      <button 
+                        className="ml-2 underline text-blue-500"
+                        onClick={() => {
+                          if (spectrogramURL) {
+                            handleAudioVisualization(spectrogramURL);
+                          }
+                        }}
+                      >
+                        Retry
+                      </button>
+                    </p>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <img 
+                      src={spectrogramURL} 
+                      alt="Audio Analysis" 
+                      className="max-w-full h-auto"
+                      style={{ imageRendering: 'crisp-edges' }}
+                      onError={() => setImageError(true)}
+                    />
+                    
+                    {/* Image overlay with legends */}
+                    <div className="absolute top-2 right-2 bg-black/70 text-white text-xs p-2 rounded shadow">
+                      <div className="flex items-center mb-1">
+                        <span className="w-3 h-3 bg-cyan-400 inline-block mr-2"></span>
+                        <span>Waveform (Speech Pattern)</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="w-3 h-3 bg-red-500 inline-block mr-2"></span>
+                        <span>Volume/Emphasis</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
                 <p className="text-xs text-muted-foreground mt-2">
                   This visualization shows your speech patterns over time.
                   The cyan waveform shows the audio intensity, while
