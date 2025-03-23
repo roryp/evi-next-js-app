@@ -109,6 +109,44 @@ The standalone Sarcasm Detector offers:
 - Detailed analysis reports that explain detected sarcastic elements
 - Integration with OpenAI's advanced language and vision models
 
+#### Text Analysis Features
+
+The text analysis capability provides sophisticated sentiment flow detection:
+
+- **Segment-by-segment analysis**: The system breaks down text into natural segments and analyzes each one separately
+- **Sentiment visualization**: Each segment is color-coded based on its sentiment (positive, negative, neutral, or sarcastic)
+- **Intensity indicators**: The opacity of each color indicates the strength of the detected sentiment
+- **Contextual understanding**: The analysis considers the full context of the text, detecting contradictions that might indicate sarcasm
+- **Visual sentiment flow**: The color-coded display creates a visual representation of sentiment shifts throughout the text
+- **Detailed sarcasm explanation**: When sarcasm is detected, the system provides a thorough explanation of the linguistic patterns identified
+
+#### Facial Expression Analysis
+
+The facial sarcasm detection feature analyzes visual cues associated with sarcastic expressions:
+
+- **Real-time webcam integration**: Capture facial expressions directly through your browser
+- **Snapshot capability**: Take and analyze still images of facial expressions
+- **Sarcasm indicators detection**: Identifies facial features like smirks, raised eyebrows, eye rolls, and other micro-expressions
+- **Analysis report**: Provides a detailed breakdown of detected facial cues and their connection to sarcastic intent
+- **Privacy-focused**: All processing happens on your device with secure API calls (no images are stored)
+
+#### Voice Sarcasm Analysis
+
+The voice analysis component provides advanced prosodic analysis to detect sarcasm in speech:
+
+- **High-quality audio recording**: Records voice with optimized settings for sarcasm detection
+- **Spectrogram visualization**: Generates a detailed visual representation of speech patterns
+- **Prosody analysis**: Analyzes key speech features including:
+  - Pitch contour (visualized as an orange line)
+  - Volume/emphasis patterns (visualized as red bars)
+  - Syllable boundaries (marked with yellow lines)
+  - Word flow patterns (shown as a gradient flow area)
+- **Speech rate measurement**: Calculates syllables per second to detect unusual speaking patterns
+- **Pitch variation analysis**: Identifies exaggerated or unusual pitch patterns that may indicate sarcasm
+- **Word boundary detection**: Highlights pauses between words that might signal sarcastic emphasis
+- **Combined text-audio analysis**: The system transcribes speech and analyzes both the text content and vocal delivery
+- **Detailed prosody data**: Technical speech pattern data is available for those interested in the underlying metrics
+
 To use the Sarcasm Detector:
 
 1. Navigate to the "Sarcasm Detector" page using the navigation bar
@@ -131,6 +169,34 @@ The application now includes a Sarcasm Creator feature that allows users to gene
 2. Enter the text for which you want to generate a sarcastic response.
 3. Click the "Generate Sarcasm" button.
 4. Review the generated sarcastic response displayed on the page.
+
+#### Customizable Sarcasm Generation Parameters
+
+The Sarcasm Creator includes a comprehensive configuration system for fine-tuning the generation:
+
+- **Sarcasm style customization**: Various sarcastic styles can be:
+  - Enabled or disabled based on preference
+  - Adjusted for prominence with custom weight values
+  - Each style includes a description explaining the sarcastic technique
+
+- **Available styles include**:
+  - Exaggeration
+  - Fake Enthusiasm 
+  - Mocking Repetition
+  - Ironic Understatement
+  - Rhetorical Questions
+  - Fake Compliments
+  - Literal Interpretation
+  - Absurd Comparison
+  - Dramatic Punctuation
+
+- **Tone settings adjustment**: Control various aspects of the sarcastic tone:
+  - Intensity (how strong the sarcasm will be)
+  - Humor (balance between funny and serious)
+  - Harshness (how cutting vs. gentle)
+  - Subtlety (how obvious vs. subtle)
+
+- **Real-time parameter updates**: Changes to the configuration take effect immediately when generating new responses
 
 The Sarcasm Creator provides a fun and interactive way to explore the nuances of sarcastic language. It can be used for entertainment, educational purposes, or to enhance conversational AI systems.
 

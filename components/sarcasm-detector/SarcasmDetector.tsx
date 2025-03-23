@@ -1,5 +1,6 @@
 "use client";
 
+import React from 'react';
 import { useState } from "react";
 import { TextAnalysis } from "./TextAnalysis";
 import { WebcamAnalysis } from "./WebcamAnalysis";
@@ -13,6 +14,23 @@ export function SarcasmDetector() {
   const [result, setResult] = useState<string>("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+  const handleTabChange = (tab: TabType) => {
+    if (!isAnalyzing) {
+      setActiveTab(tab);
+      setResult("");
+    }
+  };
+
+  const handleAnalysisStart = () => {
+    setIsAnalyzing(true);
+    setResult("");
+  };
+
+  const handleAnalysisComplete = (result: string) => {
+    setIsAnalyzing(false);
+    setResult(result);
+  };
+
   return (
     <div className="container mx-auto p-6 max-w-4xl">
       <h1 className="text-3xl font-bold text-center mb-6">Sarcasm Detector</h1>
@@ -21,25 +39,28 @@ export function SarcasmDetector() {
         <div className="flex border-b border-border">
           <Button
             variant={activeTab === "text" ? "default" : "ghost"}
-            onClick={() => setActiveTab("text")}
+            onClick={() => handleTabChange("text")}
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary px-4 py-2"
             data-state={activeTab === "text" ? "active" : ""}
+            disabled={isAnalyzing}
           >
             Text Analysis
           </Button>
           <Button
             variant={activeTab === "webcam" ? "default" : "ghost"}
-            onClick={() => setActiveTab("webcam")}
+            onClick={() => handleTabChange("webcam")}
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary px-4 py-2"
             data-state={activeTab === "webcam" ? "active" : ""}
+            disabled={isAnalyzing}
           >
             Webcam Analysis
           </Button>
           <Button
             variant={activeTab === "audio" ? "default" : "ghost"}
-            onClick={() => setActiveTab("audio")}
+            onClick={() => handleTabChange("audio")}
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary px-4 py-2"
             data-state={activeTab === "audio" ? "active" : ""}
+            disabled={isAnalyzing}
           >
             Audio Analysis
           </Button>
@@ -49,40 +70,22 @@ export function SarcasmDetector() {
       <div className="p-4 border border-border rounded-lg">
         {activeTab === "text" && (
           <TextAnalysis 
-            onAnalysisStart={() => {
-              setIsAnalyzing(true);
-              setResult("");
-            }}
-            onAnalysisComplete={(result) => {
-              setResult(result);
-              setIsAnalyzing(false);
-            }}
+            onAnalysisStart={handleAnalysisStart}
+            onAnalysisComplete={handleAnalysisComplete}
           />
         )}
         
         {activeTab === "webcam" && (
           <WebcamAnalysis 
-            onAnalysisStart={() => {
-              setIsAnalyzing(true);
-              setResult("");
-            }}
-            onAnalysisComplete={(result) => {
-              setResult(result);
-              setIsAnalyzing(false);
-            }}
+            onAnalysisStart={handleAnalysisStart}
+            onAnalysisComplete={handleAnalysisComplete}
           />
         )}
         
         {activeTab === "audio" && (
           <AudioAnalysis 
-            onAnalysisStart={() => {
-              setIsAnalyzing(true);
-              setResult("");
-            }}
-            onAnalysisComplete={(result) => {
-              setResult(result);
-              setIsAnalyzing(false);
-            }}
+            onAnalysisStart={handleAnalysisStart}
+            onAnalysisComplete={handleAnalysisComplete}
           />
         )}
       </div>
@@ -96,9 +99,28 @@ export function SarcasmDetector() {
 
       {result && (
         <div className="mt-6 p-4 border border-border rounded-lg bg-card">
-          <div dangerouslySetInnerHTML={{ __html: result }}></div>
+          <div className="analysis-results prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: result }}></div>
         </div>
       )}
+
+      <style jsx global>{`
+        .analysis-results p {
+          margin-bottom: 0.75rem;
+        }
+        .analysis-results strong {
+          font-weight: 600;
+        }
+        .analysis-results .analysis-content {
+          margin-top: 1rem;
+          padding: 0.75rem;
+          background-color: #f8f9fa;
+          border-radius: 0.375rem;
+          border-left: 3px solid #3b82f6;
+        }
+        .analysis-results .analysis-content p {
+          margin-bottom: 0.5rem;
+        }
+      `}</style>
     </div>
   );
 }
