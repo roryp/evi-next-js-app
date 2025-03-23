@@ -403,8 +403,13 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
                       src={spectrogramURL} 
                       alt="Audio Analysis" 
                       className="max-w-full h-auto"
-                      style={{ imageRendering: 'crisp-edges' }}
+                      style={{ 
+                        imageRendering: '-webkit-optimize-contrast',
+                        objectFit: 'contain',
+                        width: '100%'
+                      }}
                       onError={() => setImageError(true)}
+                      crossOrigin="anonymous"
                     />
                     
                     {/* Fixed legend position - now at bottom center as a standalone component */}
