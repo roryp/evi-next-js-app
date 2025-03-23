@@ -416,23 +416,49 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
                     <div className="mt-4 flex justify-center">
                       <div className="inline-flex items-center px-2 py-1 text-xs gap-4 bg-muted rounded-md">
                         <div className="flex items-center">
-                          <span className="w-3 h-3 bg-cyan-400 inline-block mr-1"></span>
+                          <span className="inline-block mr-1">
+                            <svg width="15" height="15" viewBox="0 0 15 15">
+                              <path d="M2 7.5 L13 7.5" stroke="rgb(34, 211, 238)" strokeWidth="2" fill="none"/>
+                            </svg>
+                          </span>
                           <span>Waveform</span>
                         </div>
                         <div className="flex items-center">
-                          <span className="w-3 h-3 bg-red-500 inline-block mr-1"></span>
+                          <span className="inline-block mr-1">
+                            <svg width="15" height="15" viewBox="0 0 15 15">
+                              <rect x="3" y="5" width="9" height="5" fill="rgba(239, 68, 68, 0.5)" rx="1"/>
+                            </svg>
+                          </span>
                           <span>Volume/Emphasis</span>
                         </div>
                         <div className="flex items-center">
-                          <span className="w-3 h-3 bg-gradient-to-b from-red-400 to-yellow-400 inline-block mr-1"></span>
+                          <span className="inline-block mr-1">
+                            <svg width="15" height="15" viewBox="0 0 15 15">
+                              <defs>
+                                <linearGradient id="wordFlowGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                  <stop offset="0%" stopColor="rgb(248, 113, 113)" />
+                                  <stop offset="100%" stopColor="rgb(250, 204, 21)" />
+                                </linearGradient>
+                              </defs>
+                              <path d="M3 5 Q7.5 10 12 5" stroke="url(#wordFlowGradient)" strokeWidth="2" fill="none"/>
+                            </svg>
+                          </span>
                           <span>Word Flow</span>
                         </div>
                         <div className="flex items-center">
-                          <span className="w-3 h-3 bg-orange-400 inline-block mr-1"></span>
+                          <span className="inline-block mr-1">
+                            <svg width="15" height="15" viewBox="0 0 15 15">
+                              <path d="M2 10 Q5 5 8 10 T14 5" stroke="rgb(251, 146, 60)" strokeWidth="2" fill="none"/>
+                            </svg>
+                          </span>
                           <span>Pitch Contour</span>
                         </div>
                         <div className="flex items-center">
-                          <span className="w-3 h-3 bg-yellow-400 inline-block mr-1"></span>
+                          <span className="inline-block mr-1">
+                            <svg width="15" height="15" viewBox="0 0 15 15">
+                              <line x1="7.5" y1="2" x2="7.5" y2="13" stroke="rgb(250, 204, 21)" strokeWidth="2"/>
+                            </svg>
+                          </span>
                           <span>Syllable Markers</span>
                         </div>
                       </div>
