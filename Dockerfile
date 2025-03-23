@@ -45,6 +45,17 @@ RUN pnpm build
 FROM node:18-alpine AS runner
 WORKDIR /app
 
+# Install runtime dependencies required for canvas
+RUN apk add --no-cache \
+    cairo \
+    jpeg \
+    pango \
+    giflib \
+    librsvg \
+    libogg \
+    libvorbis \
+    alsa-lib
+
 # Copy the standalone output from the build stage
 COPY --from=base /app/.next/standalone ./
 COPY --from=base /app/.next/static ./.next/static
