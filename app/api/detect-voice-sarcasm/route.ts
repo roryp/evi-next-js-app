@@ -355,7 +355,7 @@ async function generateSpectrogram(audioBuffer: Buffer): Promise<{image: string,
     
     // First, find potential word boundaries by looking for longer pauses
     // (gaps between syllables that exceed a threshold)
-    const wordBoundaries = [];
+    const wordBoundaries: number[] = [];
     const minPauseDuration = 0.2; // seconds
     
     // Find word boundaries by looking for longer pauses between syllables
@@ -648,9 +648,9 @@ export async function POST(request: Request) {
             Prosody data:
             - Speech rate: ${prosodyData.speechRate.toFixed(2)} syllables per second
             - Number of syllables detected: ${prosodyData.syllableBoundaries.length}
-            - Syllable timing (seconds): ${prosodyData.syllableBoundaries.map(t => t.toFixed(2)).join(', ')}
+            - Syllable timing (seconds): ${prosodyData.syllableBoundaries.map((t: number) => t.toFixed(2)).join(', ')}
             - Pitch variation: ${describePitchVariation(prosodyData.pitchContour)}
-            - Word boundaries detected at approximately: ${identifyWordBoundaries(prosodyData.syllableBoundaries).map(t => t.toFixed(2)).join(', ')} seconds
+            - Word boundaries detected at approximately: ${identifyWordBoundaries(prosodyData.syllableBoundaries).map((t: number) => t.toFixed(2)).join(', ')} seconds
             
             Based on both the transcription and these prosodic features, determine if sarcasm is present.`
           }
@@ -667,7 +667,7 @@ export async function POST(request: Request) {
         spectrogram: spectrogram,
         prosody: prosodyData
       });
-    } catch (processingError) {
+    } catch (processingError: unknown) {
       console.error('Processing error:', processingError);
       
       // Make sure we clean up the temporary file even if there's an error
@@ -676,7 +676,7 @@ export async function POST(request: Request) {
       }
       
       return NextResponse.json({ 
-        error: `Error processing audio: ${processingError.message || 'Unknown error'}` 
+        error: `Error processing audio: ${processingError instanceof Error ? processingError.message : 'Unknown error'}` 
       }, { status: 500 });
     }
   } catch (error: any) {
