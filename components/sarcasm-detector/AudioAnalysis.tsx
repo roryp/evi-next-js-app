@@ -16,16 +16,14 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
   const [audioURL, setAudioURL] = useState<string | null>(null);
   const [recordingTime, setRecordingTime] = useState(0);
   const [statusMessage, setStatusMessage] = useState("Ready to record");
-  const [spectrogramURL, setSpectrogramURL] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [imageError, setImageError] = useState(false);
   const [prosodyData, setProsodyData] = useState<{ 
     syllableBoundaries: number[],
     pitchContour: number[],
     intensity: number[],
     speechRate: number
   } | null>(null);
-  const [showProsodyOverlay, setShowProsodyOverlay] = useState(true);
+  const [prosodyTable, setProsodyTable] = useState<string | null>(null);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -33,8 +31,6 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
   const audioRef = useRef<HTMLAudioElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const processingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const spectrogramCanvasRef = useRef<HTMLCanvasElement>(null);
-  const prosodyCanvasRef = useRef<HTMLCanvasElement>(null);
 
   // Clean up function
   useEffect(() => {
@@ -74,8 +70,9 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
       audioChunksRef.current = [];
       setAudioURL(null);
       setRecordingTime(0);
-      setSpectrogramURL(null);
       setIsProcessing(false);
+      setProsodyTable(null);
+      setProsodyData(null);
       
       // Request microphone access
       const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -145,26 +142,6 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
     }
   };
 
-  const handleAudioVisualization = (spectrogramURL: string | null) => {
-    if (spectrogramURL) {
-      setImageError(false);
-      // Pre-load the image to ensure it's ready before displaying
-      const img = new Image();
-      img.onload = () => {
-        setSpectrogramURL(spectrogramURL);
-      };
-      img.onerror = () => {
-        console.error('Failed to load audio visualization');
-        setImageError(true);
-        setSpectrogramURL(spectrogramURL); // Still set the URL for retry attempts
-      };
-      img.src = spectrogramURL;
-    } else {
-      setSpectrogramURL(null);
-      setImageError(false);
-    }
-  };
-
   // Format analysis text by converting markdown to properly formatted HTML
   const formatAnalysisText = (text: string): string => {
     if (!text) return '';
@@ -201,7 +178,7 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
       onAnalysisStart();
       setIsProcessing(true);
       setStatusMessage("Converting and analyzing audio...");
-      setSpectrogramURL(null);
+      setProsodyTable(null);
       setProsodyData(null);
 
       // Set a timeout for the entire processing
@@ -230,10 +207,15 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
           .reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
       
-      const apiResponse = await fetch('/api/detect-voice-sarcasm', {
+      // Add a cache-busting parameter to prevent caching
+      const cacheBuster = Date.now();
+      const apiResponse = await fetch(`/api/detect-voice-sarcasm?t=${cacheBuster}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
         },
         body: JSON.stringify({ audio: base64Audio })
       });
@@ -270,11 +252,16 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
       }
       
       onAnalysisComplete(data.result);
-      handleAudioVisualization(data.spectrogram);
       
       // Set prosody data if available
       if (data.prosody) {
         setProsodyData(data.prosody);
+      }
+      
+      // Set prosody table if available
+      if (data.prosodyTable) {
+        setProsodyTable(data.prosodyTable);
+        console.log("Received prosody table:", data.prosodyTable);
       }
       
       setStatusMessage("Analysis complete.");
@@ -377,115 +364,40 @@ export function AudioAnalysis({ onAnalysisStart, onAnalysisComplete }: AudioAnal
             />
           )}
           
-          {spectrogramURL && (
+          {/* Display prosody data as a simple table */}
+          {prosodyTable && (
             <div className="mt-4">
-              <h3 className="text-sm font-semibold mb-2">Audio Analysis with Prosody</h3>
+              <h3 className="text-sm font-semibold mb-2">Prosody Analysis</h3>
+              <div 
+                className="border border-border p-2 rounded"
+                dangerouslySetInnerHTML={{ __html: prosodyTable }}
+              />
+            </div>
+          )}
+
+          {/* Fallback to display prosody data in case the table doesn't work */}
+          {!prosodyTable && prosodyData && (
+            <div className="mt-4">
+              <h3 className="text-sm font-semibold mb-2">Prosody Analysis</h3>
               <div className="border border-border p-2 rounded">
-                {imageError ? (
-                  <div className="p-4 bg-red-50 border border-red-200 rounded">
-                    <p className="text-red-500 text-sm">
-                      Unable to load visualization. 
-                      <button 
-                        className="ml-2 underline text-blue-500"
-                        onClick={() => {
-                          if (spectrogramURL) {
-                            handleAudioVisualization(spectrogramURL);
-                          }
-                        }}
-                      >
-                        Retry
-                      </button>
-                    </p>
-                  </div>
-                ) : (
-                  <div className="relative">
-                    <img 
-                      src={spectrogramURL} 
-                      alt="Audio Analysis" 
-                      className="max-w-full h-auto"
-                      style={{ 
-                        imageRendering: '-webkit-optimize-contrast',
-                        objectFit: 'contain',
-                        width: '100%'
-                      }}
-                      onError={() => setImageError(true)}
-                      crossOrigin="anonymous"
-                    />
-                    
-                    {/* Fixed legend position - now at bottom center as a standalone component */}
-                    <div className="mt-4 flex justify-center">
-                      <div className="inline-flex items-center px-2 py-1 text-xs gap-4 bg-muted rounded-md">
-                        <div className="flex items-center">
-                          <span className="inline-block mr-1">
-                            <svg width="15" height="15" viewBox="0 0 15 15">
-                              <path d="M2 7.5 L13 7.5" stroke="rgb(34, 211, 238)" strokeWidth="2" fill="none"/>
-                            </svg>
-                          </span>
-                          <span>Waveform</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="inline-block mr-1">
-                            <svg width="15" height="15" viewBox="0 0 15 15">
-                              <rect x="3" y="5" width="9" height="5" fill="rgba(239, 68, 68, 0.5)" rx="1"/>
-                            </svg>
-                          </span>
-                          <span>Volume/Emphasis</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="inline-block mr-1">
-                            <svg width="15" height="15" viewBox="0 0 15 15">
-                              <defs>
-                                <linearGradient id="wordFlowGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                  <stop offset="0%" stopColor="rgb(248, 113, 113)" />
-                                  <stop offset="100%" stopColor="rgb(250, 204, 21)" />
-                                </linearGradient>
-                              </defs>
-                              <path d="M3 5 Q7.5 10 12 5" stroke="url(#wordFlowGradient)" strokeWidth="2" fill="none"/>
-                            </svg>
-                          </span>
-                          <span>Word Flow</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="inline-block mr-1">
-                            <svg width="15" height="15" viewBox="0 0 15 15">
-                              <path d="M2 10 Q5 5 8 10 T14 5" stroke="rgb(251, 146, 60)" strokeWidth="2" fill="none"/>
-                            </svg>
-                          </span>
-                          <span>Pitch Contour</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="inline-block mr-1">
-                            <svg width="15" height="15" viewBox="0 0 15 15">
-                              <line x1="7.5" y1="2" x2="7.5" y2="13" stroke="rgb(250, 204, 21)" strokeWidth="2"/>
-                            </svg>
-                          </span>
-                          <span>Syllable Markers</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                <p className="text-xs text-muted-foreground mt-2">
-                  This visualization shows prosodic features of your speech. The cyan waveform shows the audio intensity,
-                  while the yellow vertical lines mark syllable boundaries. The orange line represents pitch contour,
-                  which is a key indicator of sarcasm when it follows unusual patterns.
-                </p>
-                
-                {prosodyData && (
-                  <div className="mt-2 text-xs">
-                    <details>
-                      <summary className="cursor-pointer text-primary">Prosody Details</summary>
-                      <div className="mt-1 p-2 bg-muted rounded text-xs">
-                        <p><strong>Speech Rate:</strong> {prosodyData.speechRate.toFixed(2)} syllables/second</p>
-                        <p><strong>Syllable Count:</strong> {prosodyData.syllableBoundaries.length}</p>
-                        <p><strong>Prosodic Features:</strong> The visualization shows pitch contour (orange line) and 
-                        syllable boundaries (yellow lines), which are acoustic correlates of voice that help identify 
-                        sarcasm through exaggerated intonation patterns or unexpected emphasis.</p>
-                      </div>
-                    </details>
-                  </div>
-                )}
+                <table className="prosody-table" style={{width:"100%", borderCollapse: "collapse", marginTop: "15px"}}>
+                  <thead>
+                    <tr style={{backgroundColor: "#f2f2f2"}}>
+                      <th style={{padding: "8px", border: "1px solid #ddd", textAlign: "left"}}>Prosody Feature</th>
+                      <th style={{padding: "8px", border: "1px solid #ddd", textAlign: "left"}}>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style={{padding: "8px", border: "1px solid #ddd"}}>Speech Rate</td>
+                      <td style={{padding: "8px", border: "1px solid #ddd"}}>{prosodyData.speechRate.toFixed(2)} syllables/second</td>
+                    </tr>
+                    <tr>
+                      <td style={{padding: "8px", border: "1px solid #ddd"}}>Number of Syllables</td>
+                      <td style={{padding: "8px", border: "1px solid #ddd"}}>{prosodyData.syllableBoundaries.length}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           )}

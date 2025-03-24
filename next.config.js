@@ -5,7 +5,7 @@ const nextConfig = {
     unoptimized: true
   },
   env: {
-    PORT: 3000
+    PORT: '3000'
   }
 };
 
