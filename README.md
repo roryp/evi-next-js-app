@@ -135,7 +135,6 @@ The facial sarcasm detection feature analyzes visual cues associated with sarcas
 The voice analysis component provides advanced prosodic analysis to detect sarcasm in speech:
 
 - **High-quality audio recording**: Records voice with optimized settings for sarcasm detection
-- **Spectrogram visualization**: Generates a detailed visual representation of speech patterns
 - **Prosody analysis**: Analyzes key speech features including:
   - Pitch contour (visualized as an orange line)
   - Volume/emphasis patterns (visualized as red bars)
