@@ -233,7 +233,7 @@ HUME_SECRET_KEY=your_hume_secret_key_here
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v16 or later recommended)
+- [Node.js](https://nodejs.org/) (v18 or later recommended)
 - [pnpm](https://pnpm.io/) package manager
 - A Hume API key (for access to the Empathic Voice Interface)
 - An OpenAI API key (for the Sarcasm Detector functionality)
@@ -243,7 +243,7 @@ HUME_SECRET_KEY=your_hume_secret_key_here
 1. Clone this repository:
    ```bash
    git clone <repository-url>
-   cd evi-next-js-app-router
+   cd evi-next-js-app
    ```
 
 2. Install dependencies:
@@ -255,9 +255,14 @@ HUME_SECRET_KEY=your_hume_secret_key_here
    Create a `.env.local` file in the root directory with your API keys:
    ```
    HUME_API_KEY=your_hume_api_key_here
-   OPENAI_API_KEY=your_openai_api_key_here
    HUME_SECRET_KEY=your_hume_secret_key_here
+   OPENAI_API_KEY=your_openai_api_key_here
    ```
+
+   Alternatively, create the following files in the root directory:
+   - `hume_api_key.txt`: Paste your Hume API key
+   - `hume_secret_key.txt`: Paste your Hume secret key
+   - `openai_api_key.txt`: Paste your OpenAI API key
 
 ### Development
 
@@ -279,15 +284,11 @@ pnpm build
 
 ### Running in Production Mode
 
-This application contains API routes that require a server runtime to function properly. To run the application in production mode:
+This Next.js application is configured with `output: 'standalone'` for optimized production deployment:
 
-1. Make sure the `next.config.js` file does NOT contain `output: 'export'`:
-   ```javascript
-   module.exports = {
-     basePath: '',
-     assetPrefix: '',
-     // other configurations...
-   };
+1. Build the application:
+   ```bash
+   pnpm build
    ```
 
 2. Run the production server:
@@ -297,17 +298,16 @@ This application contains API routes that require a server runtime to function p
 
    The application will be available at [http://localhost:3000](http://localhost:3000) by default.
 
-> **Important**: If you want to deploy this app as a static export (e.g., to GitHub Pages), note that the API routes (including sarcasm detection features) will not work as they require a server. In that case, you would need to modify the application to use client-side API calls or a separate backend service.
-
 ### Running the Docker Image Locally
 
 To build and run the Docker image locally, follow these steps:
 
 1. **Build the Docker Image with Docker Secrets (Recommended)**:
    
-   The Dockerfile is configured to use Docker secrets for secure handling of API keys. This is the most secure approach as it prevents API keys from being stored in image layers:
+   The Dockerfile is configured to use Docker secrets for secure handling of API keys:
 
    ```bash
+   # For Linux/macOS
    docker build \
      --secret id=openai_key,src=openai_api_key.txt \
      --secret id=hume_key,src=hume_api_key.txt \
@@ -325,8 +325,9 @@ To build and run the Docker image locally, follow these steps:
    ```
 
 2. **Run the Docker Container**:
-   Run the Docker container with the necessary environment variables:
+
    ```bash
+   # For Linux/macOS
    docker run -p 3000:3000 \
      -e OPENAI_API_KEY="$(cat openai_api_key.txt)" \
      -e HUME_API_KEY="$(cat hume_api_key.txt)" \
@@ -405,6 +406,7 @@ To deploy this application to Azure Container Apps, follow these steps:
 
 ### Troubleshooting
 
-- **API routes not working in production**: Ensure that `output: 'export'` is removed from `next.config.js` to support API routes.
-- **OpenAI API errors**: Verify that your OpenAI API key is correctly set in the `.env.local` file and that you have sufficient quota for API calls.
-- **Type errors related to response handling**: The application uses proper null checks when handling API responses to prevent TypeScript errors.
+- **API routes not working in production**: Ensure that your Next.js configuration is properly set for API routes.
+- **OpenAI API errors**: Verify that your OpenAI API key is correctly set and that you have sufficient quota for API calls.
+- **Docker build errors**: Make sure your secret files exist in the root directory with the correct permissions.
+- **Node.js version issues**: This application uses Next.js 14.2.3 which works best with Node.js v18+.

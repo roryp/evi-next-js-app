@@ -1,10 +1,27 @@
 FROM node:18-alpine AS base
 
-# Install only essential build dependencies
-RUN apk add --no-cache python3 make g++ libc6-compat
+# Install required build dependencies
+RUN apk add --no-cache \
+    python3 \
+    python3-dev \
+    py3-pip \
+    make \
+    g++ \
+    libc6-compat \
+    # Canvas dependencies
+    cairo-dev \
+    pango-dev \
+    jpeg-dev \
+    giflib-dev \
+    pixman-dev \
+    pangomm-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    # Install setuptools using apk instead of pip
+    py3-setuptools
 
-# Install pnpm
-RUN npm install -g pnpm@7.30.0
+# Install latest pnpm
+RUN npm install -g pnpm@10.6.5
 
 # Set working directory
 WORKDIR /app
@@ -13,8 +30,14 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 COPY postcss.config.mjs tailwind.config.ts ./
 
-# Install dependencies and update lockfile
-RUN pnpm install --frozen-lockfile --production=false
+# Add onlyBuiltDependencies config to allow build to succeed
+RUN echo '{"pnpm":{"onlyBuiltDependencies":["canvas"]}}' > .npmrc
+
+# Install dependencies with specific flags to handle native modules
+RUN pnpm install --no-frozen-lockfile --production=false \
+    --config.platform=linux \
+    --config.ignore-scripts=false \
+    --unsafe-perm
 
 # Copy the rest of the application
 COPY . .
