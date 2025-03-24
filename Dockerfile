@@ -1,18 +1,7 @@
 FROM node:18-alpine AS base
 
-# Install build dependencies
-RUN apk add --no-cache python3 make g++ \
-    pkgconfig \
-    cairo-dev \
-    pango-dev \
-    jpeg-dev \
-    giflib-dev \
-    librsvg-dev \
-    libogg-dev \
-    libvorbis-dev \
-    alsa-lib-dev \
-    py3-setuptools \
-    python3-dev
+# Install only essential build dependencies
+RUN apk add --no-cache python3 make g++ libc6-compat
 
 # Install pnpm
 RUN npm install -g pnpm@7.30.0
@@ -25,7 +14,7 @@ COPY package.json pnpm-lock.yaml ./
 COPY postcss.config.mjs tailwind.config.ts ./
 
 # Install dependencies and update lockfile
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile --production=false
 
 # Copy the rest of the application
 COPY . .
@@ -45,21 +34,13 @@ RUN pnpm build
 FROM node:18-alpine AS runner
 WORKDIR /app
 
-# Install runtime dependencies required for canvas
-RUN apk add --no-cache \
-    cairo \
-    jpeg \
-    pango \
-    giflib \
-    librsvg \
-    libogg \
-    libvorbis \
-    alsa-lib
-
 # Copy the standalone output from the build stage
 COPY --from=base /app/.next/standalone ./
 COPY --from=base /app/.next/static ./.next/static
 COPY --from=base /app/public ./public
+
+# Create tmp directory for audio processing
+RUN mkdir -p tmp && chmod 777 tmp
 
 # Production runtime configuration
 ENV NODE_ENV=production

@@ -55,7 +55,9 @@ az containerapp create \
   --target-port 3000 \
   --ingress external \
   --min-replicas 1 \
-  --max-replicas 10 \
+  --max-replicas 5 \
+  --cpu 2 \
+  --memory 4.0Gi \
   --env-vars \
     OPENAI_API_KEY=$OPENAI_API_KEY \
     HUME_API_KEY=$HUME_API_KEY \
