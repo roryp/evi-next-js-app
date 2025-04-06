@@ -5,6 +5,19 @@
 Sarcasm is a fundamental aspect of human communication that conveys complex emotional states. Yet, for many individuals—particularly those with neurodivergent conditions—detecting sarcasm can be a significant barrier to meaningful interaction.
 
 This project bridges that gap by leveraging AI technology to detect sarcastic speech patterns through emotion analysis, creating more inclusive communication environments for everyone.
+
+## Learn More
+
+For an overview of AI speech technology applications in accessibility, visit [this resource](https://www.youtube.com/watch?v=5FWwM1S8RfE).
+
+## Demo Video
+
+Watch our demonstration video:
+https://github.com/roryp/evi-next-js-app/raw/main/acc101_part7.mp4
+
+Start with Azure AI speech 
+https://ai.azure.com/explore/models/aiservices/Azure-AI-Speech/version/1/registry/azureml-cogsvc/tryout
+
 ## Overview
 
 This application includes a sophisticated sarcasm detection feature that analyzes emotional signals from Hume's Empathic Voice Interface. The algorithm has been enhanced to detect even subtle forms of sarcasm with high accuracy.
@@ -416,18 +429,3 @@ To deploy this application to Azure Container Apps, follow these steps:
 - **OpenAI API errors**: Verify that your OpenAI API key is correctly set and that you have sufficient quota for API calls.
 - **Docker build errors**: Make sure your secret files exist in the root directory with the correct permissions.
 - **Node.js version issues**: This application uses Next.js 14.2.3 which works best with Node.js v18+.
-
-
-## Learn More
-
-For an overview of AI speech technology applications in accessibility, visit [this resource](https://www.youtube.com/watch?v=5FWwM1S8RfE).
-
-## Demo Video
-
-Watch our demonstration video:
-
-https://github.com/roryp/evi-next-js-app/raw/main/acc101_part7.mp4
-
-Start with Azure AI speech 
-
-https://ai.azure.com/explore/models/aiservices/Azure-AI-Speech/version/1/registry/azureml-cogsvc/tryout
