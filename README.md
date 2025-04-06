@@ -82,3 +82,9 @@ By deploying this solution, you're contributing to a more accessible world where
 ## Learn More
 
 For an overview of AI speech technology applications in accessibility, visit [this resource](https://www.youtube.com/watch?v=5FWwM1S8RfE).
+
+## Demo Video
+
+Watch our demonstration video:
+
+https://github.com/roryp/evi-next-js-app/raw/main/acc101_part7.mp4
