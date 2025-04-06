@@ -1,106 +1,84 @@
-# Hear the hidden; disarm sarcasm
+# Hear the Hidden: AI-Powered Sarcasm Detection
 
-🟢 I'm so glad we picked the 🔵 perfect day for a picnic — 🟣 just like you said, 🔴 no chance of rain!
+## Introduction
 
-🔍 Breakdown:
+Sarcasm is a fundamental aspect of human communication that conveys complex emotional states. Yet, for many individuals—particularly those with neurodivergent conditions—detecting sarcasm can be a significant barrier to meaningful interaction.
 
-🟢 "I'm so glad"
-→ Presupposes genuine happiness, but sarcasm flips it.
-🔵 "perfect day for a picnic"
-→ Presupposes the weather is ideal — clearly, it's not.
-🟣 "just like you said"
-→ Presupposes someone confidently said this would happen.
-🔴 "no chance of rain"
-→ Presupposes a dry day. It's raining. Hard. Irony activated.
+This project bridges that gap by leveraging AI technology to detect sarcastic speech patterns through emotion analysis, creating more inclusive communication environments for everyone.
 
-## Overview
+> 🔍 **Example:** "I'm so glad we picked the perfect day for a picnic — just like you said, no chance of rain!"  
+> When it's pouring rain, the contradiction between positive words and negative context creates sarcasm.
 
-This application includes a sophisticated sarcasm detection feature that analyzes emotional signals from Hume's Empathic Voice Interface. The algorithm has been enhanced to detect even subtle forms of sarcasm with high accuracy.
+## Technology Stack
 
-### How It Works
+- **Next.js** framework for a responsive, performant web application
+- **Hume's Empathic Voice Interface** for sophisticated emotion recognition
+- **Custom emotion pattern recognition algorithms** for sarcasm detection
+- **Real-time audio and visual analysis** for multimodal input processing
+- **Configurable detection parameters** for personalized experiences
 
-The sarcasm detection system operates by:
+## Features
 
-1. **Identifying key sarcasm indicators**: The algorithm looks for specific emotions that often indicate sarcasm, including:
-   - Amusement
-   - Contempt
-   - Disappointment
-   - Awkwardness
-   - Realization
-   - Surprise (negative)
-   - Doubt
-   - Confusion
-   - Anger
+### Sarcasm Detector
+Analyze speech in real-time to identify sarcastic patterns through:
+- Emotion pattern recognition
+- Contextual analysis
+- Multimodal processing (voice, facial expressions, text)
 
-2. **Analyzing misleading emotions**: It evaluates potentially misleading emotions that might appear high during sarcastic speech:
-   - Excitement
-   - Joy
-   - Satisfaction
-   - Pride
-   - Interest
-   - Determination
-   - Surprise (positive)
+### Sarcasm Creator
+Learn how sarcasm is constructed through:
+- Interactive pattern generation
+- Emotional component visualization
+- Pattern breakdown and explanation
 
-3. **Pattern recognition**: The system looks for specific patterns associated with sarcasm:
-   - Amusement combined with contempt
-   - Exaggerated positive emotions (very high excitement/joy)
-   - Positive emotions with negative undertones
-   - Multiple contrasting emotions present simultaneously
-   - Anger alongside positive emotions
-   - High single emotion with very few supporting emotions
+### Customizable Parameters
+Fine-tune the detection algorithm with:
+- Adjustable emotion thresholds
+- Pattern weight customization
+- Real-time configuration updates
 
-4. **Contextual analysis**: The algorithm considers the emotional complexity and contradictions:
-   - Multiple high emotions indicating complexity
-   - Lack of dominant emotion
-   - Contradiction between positive and negative emotions
+## How It Works
 
-5. **Threshold application**: Sarcasm is reported to the user when the computed score exceeds a threshold value.
+The sarcasm detection system operates through five key processes:
 
-### Interactive Tooltip
+1. **Emotion Identification**: Detecting key sarcasm indicators like amusement, contempt, and disappointment
+2. **Pattern Recognition**: Analyzing emotional combinations that signal sarcasm
+3. **Contextual Analysis**: Evaluating emotional complexity and contradictions
+4. **Threshold Application**: Scoring patterns against configurable thresholds
+5. **Feedback Presentation**: Providing detailed breakdown of detected sarcasm
 
-The sarcasm detection feature includes an interactive tooltip that provides detailed information about detected sarcasm:
+## Accessibility Benefits
 
-- **Hover functionality**: Users can hover over the sarcasm indicator to see what factors contributed to the sarcasm detection
-- **Contribution breakdown**: The tooltip displays specific patterns that were detected, how much each contributed to the overall score, and detailed explanations of why each pattern suggests sarcasm
-- **Visual indicators**: Emotions that contributed to sarcasm detection are marked with a checkmark (✓) in the emotion display
+- **Enhanced Communication**: Real-time feedback on emotional context
+- **Support for Neurodivergent Users**: Explicit cues that clarify speaker intent
+- **Educational Applications**: Safe practice for improving social communication skills
+- **Inclusive Design**: Adjustable settings for different user needs
 
-### Customizable Sarcasm Parameters
+## Getting Started
 
-The application includes a comprehensive sarcasm configuration system that allows fine-tuning of the sarcasm detection algorithm:
+```bash
+# Clone the repository
+git clone [your-repo-url]
 
-- **Pattern weight customization**: Each sarcasm detection pattern can be:
-  - Enabled or disabled based on user preference
-  - Adjusted for sensitivity with custom weight values
-  - Reviewed through detailed descriptions explaining the pattern's significance
+# Install dependencies
+npm install
 
-- **Threshold adjustments**: Users can modify key thresholds including:
-  - Detection threshold (minimum score required to report sarcasm)
-  - Strong indicator threshold (sensitivity for individual emotion signals)
-  - Base indicator thresholds for different emotion categories
+# Configure Hume API keys
+# Add keys to hume_api_key.txt and hume_secret_key.txt
 
-- **Real-time updates**: Configuration changes take effect immediately across the application
-  - Parameters are shared via React Context to ensure consistent detection
-  - The Messages component receives updated parameters automatically
+# Run the application
+npm run dev
+```
 
-- **Reset functionality**: Users can easily restore default parameter values
+## Deployment
 
-### Context Integration
+Deploy with our one-click Azure script:
+```bash
+./deploy-to-azure.sh
+```
 
-The sarcasm configuration is seamlessly integrated with the Messages component:
+By deploying this solution, you're contributing to a more accessible world where the nuances of communication are available to everyone.
 
-- **Context-aware emotion analysis**: The Messages component accesses sarcasm parameters via React Context
-- **Per-message application**: Each message independently evaluates sarcasm using the current parameters
-- **Consistent UI experience**: Parameter changes affect all displayed messages consistently
-- **Efficient rendering**: Only relevant components re-render when parameters change
+## Learn More
 
-### Sarcasm Detection Table
-
-The following table showcases some key emotions and patterns evaluated by the sarcasm detection system:
-
-| Pattern | Impact | Description |
-|---------|--------|-------------|
-| Amusement + Contempt | High | A classic sarcasm pattern combining humor with disdain |
-| Exaggerated positive emotion | High | Unusually high excitement/joy that may indicate sarcastic exaggeration |
-| Contrasting emotions | Very High | Simultaneous positive and negative emotions, a strong indicator of sarcasm |
-| Anger + Positive emotion | High | Combination signals passive-aggressive sarcasm |
-| Positive emotion + Negative undertones
+For an overview of AI speech technology applications in accessibility, visit [this resource](https://www.youtube.com/watch?v=5FWwM1S8RfE).
