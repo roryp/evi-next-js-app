@@ -6,18 +6,6 @@ Sarcasm is a fundamental aspect of human communication that conveys complex emot
 
 This project bridges that gap by leveraging AI technology to detect sarcastic speech patterns through emotion analysis, creating more inclusive communication environments for everyone.
 
-## Learn More
-
-For an overview of AI speech technology applications in accessibility, visit [this resource](https://www.youtube.com/watch?v=5FWwM1S8RfE).
-
-## Demo Video
-
-Watch our demonstration video:
-https://github.com/roryp/evi-next-js-app/raw/main/acc101_part7.mp4
-
-Start with Azure AI speech 
-https://ai.azure.com/explore/models/aiservices/Azure-AI-Speech/version/1/registry/azureml-cogsvc/tryout
-
 ## Overview
 
 This application includes a sophisticated sarcasm detection feature that analyzes emotional signals from Hume's Empathic Voice Interface. The algorithm has been enhanced to detect even subtle forms of sarcasm with high accuracy.
