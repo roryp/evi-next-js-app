@@ -37,46 +37,17 @@ export function SarcasmVoiceGenerator() {
     setAudioUrl(null);
 
     try {
-      // First, generate sarcastic text using the existing API
-      const textResponse = await fetch("/api/generate-sarcasm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: inputText,
-          parameters: {
-            styleWeights: {
-              classic: { name: "Classic", weight: 1, enabled: true, description: "Traditional sarcasm with irony" },
-              exaggerated: { name: "Exaggerated", weight: 0.8, enabled: true, description: "Over-the-top emphasis" },
-              deadpan: { name: "Deadpan", weight: 0.6, enabled: true, description: "Flat delivery with hints" },
-            },
-            toneSettings: {
-              intensity: 0.8,
-              humor: 0.7,
-              harshness: 0.5,
-              subtlety: 0.3,
-            },
-          },
-        }),
-      });
-
-      if (!textResponse.ok) {
-        throw new Error(`Failed to generate sarcastic text: ${textResponse.statusText}`);
-      }
-
-      const textData = await textResponse.json();
-      const sarcasticText = textData.response;
-      setGeneratedText(sarcasticText);
-
-      // Then, generate TTS using our new API
+      // Use the input text directly for TTS
+      setGeneratedText(inputText);
+      
+      // Generate TTS using the input text
       const audioResponse = await fetch("/api/sarcastic-tts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          text: sarcasticText,
+          text: inputText,
           voiceId: settings.voice,
           instructions: settings.instructions,
         }),
@@ -175,7 +146,7 @@ export function SarcasmVoiceGenerator() {
             ref={textareaRef}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Enter text that you want to make sarcastic and convert to speech..."
+            placeholder="Enter text that you want to convert to speech..."
             className="min-h-24 p-3 border rounded-lg resize-none bg-card"
             disabled={isLoading}
           />
@@ -186,7 +157,7 @@ export function SarcasmVoiceGenerator() {
           className="w-full" 
           disabled={isLoading || !inputText.trim()}
         >
-          {isLoading ? "Generating..." : "Generate Sarcastic Voice"}
+          {isLoading ? "Generating..." : "Generate Voice"}
         </Button>
       </form>
 
@@ -199,7 +170,7 @@ export function SarcasmVoiceGenerator() {
 
       {generatedText && (
         <div className="flex flex-col gap-4 border rounded-lg p-4 bg-card">
-          <h2 className="text-xl font-semibold">Generated Sarcastic Text</h2>
+          <h2 className="text-xl font-semibold">Your Text</h2>
           <p className="whitespace-pre-wrap">{generatedText}</p>
         </div>
       )}
