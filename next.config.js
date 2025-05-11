@@ -6,6 +6,15 @@ const nextConfig = {
   },
   env: {
     PORT: '3000'
+  },
+  // Add configuration to serve static files from the tmp directory
+  async rewrites() {
+    return [
+      {
+        source: '/tmp/:path*',
+        destination: '/api/serve-audio/:path*',
+      },
+    ];
   }
 };
 

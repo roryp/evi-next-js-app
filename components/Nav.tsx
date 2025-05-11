@@ -51,9 +51,7 @@ export const Nav = () => {
             <Wand2 className="size-4" /> 
             Sarcasm Detector
           </Link>
-        </Button>
-
-        <Button
+        </Button>        <Button
           variant={pathname === "/sarcasm-creator" ? "default" : "ghost"}
           size="sm"
           asChild
@@ -62,6 +60,24 @@ export const Nav = () => {
           <Link href="/sarcasm-creator">
             <MessageSquarePlus className="size-4" /> 
             Sarcasm Creator
+          </Link>
+        </Button>
+
+        <Button
+          variant={pathname === "/sarcasm-voice" ? "default" : "ghost"}
+          size="sm"
+          asChild
+          className="flex items-center gap-1.5"
+        >
+          <Link href="/sarcasm-voice">
+            <svg className="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 9v2"></path>
+              <path d="M5 9v8"></path>
+              <path d="M15 9v6"></path>
+              <path d="M8 9v4"></path>
+              <path d="M12 9v7"></path>
+            </svg>
+            Sarcasm Voice
           </Link>
         </Button>
       </div>

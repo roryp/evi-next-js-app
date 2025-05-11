@@ -8,7 +8,15 @@ This project bridges that gap by leveraging AI technology to detect sarcastic sp
 
 ## Overview
 
-This application includes a sophisticated sarcasm detection feature that analyzes emotional signals from Hume's Empathic Voice Interface. The algorithm has been enhanced to detect even subtle forms of sarcasm with high accuracy.
+This application includes several AI-powered sarcasm features:
+
+1. **Sarcasm Detection**: A sophisticated system that analyzes emotional signals from Hume's Empathic Voice Interface to detect even subtle forms of sarcasm with high accuracy.
+
+2. **Sarcasm Creator**: A text generator that crafts sarcastic responses based on input text, with customizable sarcasm styles and tone settings.
+
+3. **Sarcasm Voice Generator**: A text-to-speech feature that converts text into spoken audio with sarcastic intonation, using customizable voice options.
+
+These tools combine to create a comprehensive suite for understanding, creating, and vocalizing sarcastic communication.
 
 ### How It Works
 
@@ -211,6 +219,37 @@ The Sarcasm Creator provides a fun and interactive way to explore the nuances of
 ```
 OPENAI_API_KEY=your_openai_api_key_here
 ```
+
+### Sarcasm Voice Generator
+
+The application includes a Sarcasm Voice Generator feature that transforms text into spoken sarcastic audio. This feature allows users to hear how their text would sound when spoken with a sarcastic tone.
+
+#### How to Use the Sarcasm Voice Generator
+
+1. Navigate to the "Sarcasm Voice" page using the navigation bar.
+2. Enter the text you want to convert to sarcastic speech.
+3. Customize the voice settings using the provided controls.
+4. Click the "Generate Voice" button.
+5. Listen to the generated audio through the audio player.
+6. Download the audio file by right-clicking on the player and selecting "Save audio as..."
+
+#### Voice Customization Options
+
+The Sarcasm Voice Generator offers several customization options:
+
+- **Voice Selection**: Choose from multiple voice options with different characteristics:
+  - Alloy (Neutral)
+  - Echo (Male)
+  - Fable (Female)
+  - Onyx (Male)
+  - Nova (Female)
+  - Shimmer (Female)
+
+- **Auto-Play**: Toggle automatic playback of newly generated audio.
+
+The Sarcasm Voice Generator leverages OpenAI's text-to-speech technology to create natural-sounding sarcastic speech. The voice selection allows users to find the perfect voice that matches their intended sarcastic tone.
+
+**Note:** This feature requires an OpenAI API key. Ensure that this is added to your `.env.local` file as mentioned in the Required API Keys section.
 
 ### Required API Keys
 
