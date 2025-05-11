@@ -1,16 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 
 export interface SarcasmVoiceSettings {
   voice: string;
-  prosody: {
-    pitch: number;
-    rate: number;
-    emphasisLevel: number;
-  };
   autoPlay: boolean;
 }
 
@@ -43,16 +37,6 @@ export function SarcasmVoiceConfig({
     });
   };
 
-  const handleProsodyChange = (property: string, value: number) => {
-    onSettingsChange({
-      ...settings,
-      prosody: {
-        ...settings.prosody,
-        [property]: value,
-      },
-    });
-  };
-
   const handleAutoPlayChange = () => {
     onSettingsChange({
       ...settings,
@@ -76,78 +60,6 @@ export function SarcasmVoiceConfig({
               {voice.name}
             </Button>
           ))}
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <h3 className="font-semibold">Prosody Settings</h3>
-        
-        <div className="grid grid-cols-1 gap-4">
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between">
-              <label htmlFor="pitch" className="text-sm">
-                Pitch: {Math.round(settings.prosody.pitch * 100)}%
-              </label>
-              <span className="text-xs text-muted-foreground">
-                Higher = more exaggerated
-              </span>
-            </div>
-            <input
-              id="pitch"
-              type="range"
-              min="0.7"
-              max="1.5"
-              step="0.05"
-              value={settings.prosody.pitch}
-              onChange={(e) => handleProsodyChange("pitch", parseFloat(e.target.value))}
-              className="w-full"
-              disabled={disabled}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between">
-              <label htmlFor="rate" className="text-sm">
-                Speed: {Math.round(settings.prosody.rate * 100)}%
-              </label>
-              <span className="text-xs text-muted-foreground">
-                Lower = more drawn out
-              </span>
-            </div>
-            <input
-              id="rate"
-              type="range"
-              min="0.7"
-              max="1.2"
-              step="0.05"
-              value={settings.prosody.rate}
-              onChange={(e) => handleProsodyChange("rate", parseFloat(e.target.value))}
-              className="w-full"
-              disabled={disabled}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between">
-              <label htmlFor="emphasisLevel" className="text-sm">
-                Word Emphasis: {settings.prosody.emphasisLevel}/3
-              </label>
-              <span className="text-xs text-muted-foreground">
-                Higher = stronger sarcastic emphasis
-              </span>
-            </div>
-            <input
-              id="emphasisLevel"
-              type="range"
-              min="1"
-              max="3"
-              step="1"
-              value={settings.prosody.emphasisLevel}
-              onChange={(e) => handleProsodyChange("emphasisLevel", parseInt(e.target.value))}
-              className="w-full"
-              disabled={disabled}
-            />
-          </div>
         </div>
       </div>
 

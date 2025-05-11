@@ -13,25 +13,20 @@ const openai = new OpenAI({
 interface RequestBody {
   text: string;
   voiceId?: string;
-  prosodySettings?: {
-    pitch: number;
-    rate: number;
-    emphasisLevel: number;
-  };
 }
 
 export async function POST(request: Request) {
   try {
     // Parse the request body
     const body: RequestBody = await request.json();
-    const { text, voiceId = "alloy", prosodySettings } = body;
+    const { text, voiceId = "alloy" } = body;
 
     if (!text) {
       return NextResponse.json({ error: "Missing required text parameter" }, { status: 400 });
     }
 
     // Process text for sarcastic effect (no SSML tags)
-    const processedText = processTextForSarcasm(text, prosodySettings);
+    const processedText = processTextForSarcasm(text);
     
     // Log the processed text for debugging
     console.log("Processed text:", processedText);
@@ -74,10 +69,7 @@ export async function POST(request: Request) {
   }
 }
 
-function processTextForSarcasm(text: string, settings?: { pitch: number; rate: number; emphasisLevel: number }) {
-  // We're not using the settings directly anymore since we're not using SSML tags
-  // But keeping the function signature for compatibility
-  
+function processTextForSarcasm(text: string) {
   // Process text to make it more sarcastic
   // Adding common sarcastic text indicators can help the TTS system sound more sarcastic
   let processedText = text;

@@ -12,11 +12,6 @@ export function SarcasmVoiceGenerator() {
   const [generatedText, setGeneratedText] = useState<string | null>(null);
   const [settings, setSettings] = useState<SarcasmVoiceSettings>({
     voice: "alloy",
-    prosody: {
-      pitch: 1.2,
-      rate: 0.9,
-      emphasisLevel: 2,
-    },
     autoPlay: true,
   });
 
@@ -82,7 +77,6 @@ export function SarcasmVoiceGenerator() {
         body: JSON.stringify({
           text: sarcasticText,
           voiceId: settings.voice,
-          prosodySettings: settings.prosody,
         }),
       });
 
@@ -136,7 +130,6 @@ export function SarcasmVoiceGenerator() {
         body: JSON.stringify({
           text,
           voiceId: settings.voice,
-          prosodySettings: settings.prosody,
         }),
       });
 
