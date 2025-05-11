@@ -228,10 +228,11 @@ The application includes a Sarcasm Voice Generator feature that transforms text 
 
 1. Navigate to the "Sarcasm Voice" page using the navigation bar.
 2. Enter the text you want to convert to sarcastic speech.
-3. Customize the voice settings using the provided controls.
-4. Click the "Generate Voice" button.
-5. Listen to the generated audio through the audio player.
-6. Download the audio file by right-clicking on the player and selecting "Save audio as..."
+3. Select your preferred TTS model (Standard or Mini).
+4. Customize the voice settings using the provided controls.
+5. Click the "Generate Voice" button.
+6. Listen to the generated audio through the audio player.
+7. Download the audio file by right-clicking on the player and selecting "Save audio as..."
 
 #### Voice Customization Options
 
@@ -247,7 +248,7 @@ The Sarcasm Voice Generator offers several customization options:
 
 - **Auto-Play**: Toggle automatic playback of newly generated audio.
 
-The Sarcasm Voice Generator leverages OpenAI's text-to-speech technology to create natural-sounding sarcastic speech. The voice selection allows users to find the perfect voice that matches their intended sarcastic tone.
+The Sarcasm Voice Generator leverages OpenAI's text-to-speech technology to create natural-sounding sarcastic speech. The TTS Mini model provides faster generation times, making it ideal for quick iterations or when you need immediate feedback, while the standard model offers the highest quality for final outputs. The voice selection allows users to find the perfect voice that matches their intended sarcastic tone.
 
 **Note:** This feature requires an OpenAI API key. Ensure that this is added to your `.env.local` file as mentioned in the Required API Keys section.
 
