@@ -13,6 +13,7 @@ export function SarcasmVoiceGenerator() {
   const [settings, setSettings] = useState<SarcasmVoiceSettings>({
     voice: "alloy",
     autoPlay: true,
+    instructions: "Speak in a sarcastic tone.",
   });
 
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -77,6 +78,7 @@ export function SarcasmVoiceGenerator() {
         body: JSON.stringify({
           text: sarcasticText,
           voiceId: settings.voice,
+          instructions: settings.instructions,
         }),
       });
 
@@ -130,6 +132,7 @@ export function SarcasmVoiceGenerator() {
         body: JSON.stringify({
           text,
           voiceId: settings.voice,
+          instructions: settings.instructions,
         }),
       });
 

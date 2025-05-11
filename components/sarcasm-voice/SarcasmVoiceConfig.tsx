@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 export interface SarcasmVoiceSettings {
   voice: string;
   autoPlay: boolean;
+  instructions: string;
 }
 
 interface SarcasmVoiceConfigProps {
@@ -29,11 +30,17 @@ export function SarcasmVoiceConfig({
     { id: "nova", name: "Nova (Female)" },
     { id: "shimmer", name: "Shimmer (Female)" },
   ];
-
   const handleVoiceChange = (voiceId: string) => {
     onSettingsChange({
       ...settings,
       voice: voiceId,
+    });
+  };
+
+  const handleInstructionsChange = (instructions: string) => {
+    onSettingsChange({
+      ...settings,
+      instructions,
     });
   };
 
@@ -46,6 +53,24 @@ export function SarcasmVoiceConfig({
 
   return (
     <div className="flex flex-col w-full gap-4 border rounded-lg p-4 bg-card">
+      <div className="flex flex-col gap-2">
+        <h3 className="font-semibold">Voice Style</h3>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="instructions" className="text-sm">
+            Instructions for the TTS model
+          </label>
+          <input
+            id="instructions"
+            type="text"
+            value={settings.instructions}
+            onChange={(e) => handleInstructionsChange(e.target.value)}
+            placeholder="Speak in a sarcastic tone."
+            className="w-full p-2 border rounded"
+            disabled={disabled}
+          />
+        </div>
+      </div>
+
       <div className="flex flex-col gap-2">
         <h3 className="font-semibold">Voice Settings</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">

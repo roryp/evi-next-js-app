@@ -13,13 +13,14 @@ const openai = new OpenAI({
 interface RequestBody {
   text: string;
   voiceId?: string;
+  instructions?: string;
 }
 
 export async function POST(request: Request) {
   try {
     // Parse the request body
     const body: RequestBody = await request.json();
-    const { text, voiceId = "alloy" } = body;
+    const { text, voiceId = "alloy", instructions = "Speak in a sarcastic tone." } = body;
 
     if (!text) {
       return NextResponse.json({ error: "Missing required text parameter" }, { status: 400 });
@@ -47,6 +48,8 @@ export async function POST(request: Request) {
       voice: voiceId as "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer",
       response_format: "wav",
       input: processedText, // Now using processed plain text without SSML tags
+      speed: 0.9,
+      instructions: instructions,
     });
     
     // Get the audio data as a buffer
