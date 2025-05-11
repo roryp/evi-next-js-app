@@ -248,8 +248,6 @@ The Sarcasm Voice Generator offers several customization options:
 
 - **Auto-Play**: Toggle automatic playback of newly generated audio.
 
-The Sarcasm Voice Generator leverages OpenAI's text-to-speech technology to create natural-sounding sarcastic speech. The TTS Mini model provides faster generation times, making it ideal for quick iterations or when you need immediate feedback, while the standard model offers the highest quality for final outputs. The voice selection allows users to find the perfect voice that matches their intended sarcastic tone.
-
 **Note:** This feature requires an OpenAI API key. Ensure that this is added to your `.env.local` file as mentioned in the Required API Keys section.
 
 ### Required API Keys
