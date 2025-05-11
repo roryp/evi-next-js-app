@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required text parameter" }, { status: 400 });
     }
 
-    // Process text for sarcastic effect (no SSML tags)
+    // Process text for sarcastic effect
     const processedText = processTextForSarcasm(text);
     
     // Log the processed text for debugging
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       model: "gpt-4o-mini-tts", //
       voice: voiceId as "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer",
       response_format: "wav",
-      input: processedText, // Now using processed plain text without SSML tags
+      input: processedText,
       speed: 0.9,
       instructions: instructions,
     });
