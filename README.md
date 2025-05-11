@@ -228,11 +228,10 @@ The application includes a Sarcasm Voice Generator feature that transforms text 
 
 1. Navigate to the "Sarcasm Voice" page using the navigation bar.
 2. Enter the text you want to convert to sarcastic speech.
-3. Select your preferred TTS model (Standard or Mini).
-4. Customize the voice settings using the provided controls.
-5. Click the "Generate Voice" button.
-6. Listen to the generated audio through the audio player.
-7. Download the audio file by right-clicking on the player and selecting "Save audio as..."
+3. Customize the voice settings using the provided controls.
+4. Click the "Generate Voice" button.
+5. Listen to the generated audio through the audio player.
+6. Download the audio file by right-clicking on the player and selecting "Save audio as..."
 
 #### Voice Customization Options
 
