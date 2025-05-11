@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     
     // Call the OpenAI TTS API with plain text
     const mp3Response = await openai.audio.speech.create({
-      model: "tts-1", // Using tts-1 as gpt-4o-mini-tts is not currently available in the standard API
+      model: "gpt-4o-mini-tts", //
       voice: voiceId as "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer",
       response_format: "wav",
       input: processedText, // Now using processed plain text without SSML tags
