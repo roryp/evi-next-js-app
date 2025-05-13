@@ -22,12 +22,10 @@ These tools combine to create a comprehensive suite for understanding, creating,
 
 Each main feature has a corresponding sequence diagram that illustrates the data flow and component interactions:
 
-- [Voice Chat with Sarcasm Detection](./diagrams/images/index.html#voice-chat) - Visualizes how the chat interface interacts with Hume's API and processes sarcasm detection in real-time
-- [Sarcasm Detector](./diagrams/images/index.html#detector) - Shows the three detection pathways (text, webcam, audio) and their API interactions
-- [Sarcasm Creator](./diagrams/images/index.html#creator) - Illustrates the flow for generating sarcastic responses with custom parameters
-- [Sarcasm Voice Generator](./diagrams/images/index.html#voice) - Depicts the process of converting text to sarcastic speech
-
-View all diagrams in the [interactive diagram viewer](./diagrams/images/index.html).
+- **Voice Chat with Sarcasm Detection**: ![Voice Chat Sequence Diagram](./diagrams/images/Voice%20Chat%20Sequence.png)
+- **Sarcasm Detector**: ![Sarcasm Detector Sequence Diagram](./diagrams/images/Sarcasm%20Detector%20Sequence.png)
+- **Sarcasm Creator**: ![Sarcasm Creator Sequence Diagram](./diagrams/images/Sarcasm%20Creator%20Sequence.png)
+- **Sarcasm Voice Generator**: ![Sarcasm Voice Sequence Diagram](./diagrams/images/Sarcasm%20Voice%20Sequence.png)
 
 ### How It Works
 
@@ -68,7 +66,8 @@ The sarcasm detection system operates by:
 
 5. **Threshold application**: Sarcasm is reported to the user when the computed score exceeds a threshold value.
 
-View the [Voice Chat sequence diagram](./diagrams/images/index.html#voice-chat) to understand how sarcasm detection works within the conversation interface.
+**Sequence Diagram:** 
+![Voice Chat Sequence Diagram](./diagrams/images/Voice%20Chat%20Sequence.png)
 
 ### Interactive Tooltip
 
@@ -131,7 +130,8 @@ In addition to the integrated sarcasm detection within the Empathic Voice Interf
 - **Facial expressions**: Analyze images captured from your webcam to identify facial cues associated with sarcasm
 - **Voice recordings**: Detect sarcasm in spoken language by analyzing speech patterns and transcribed content
 
-View the [Sarcasm Detector sequence diagram](./diagrams/images/index.html#detector) to understand the data flow of this feature.
+**Sequence Diagram:**
+![Sarcasm Detector Sequence Diagram](./diagrams/images/Sarcasm%20Detector%20Sequence.png)
 
 The standalone Sarcasm Detector offers:
 
@@ -193,7 +193,8 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 The application now includes a Sarcasm Creator feature that allows users to generate sarcastic responses based on input text. This feature leverages advanced natural language processing models to craft responses that mimic human sarcasm.
 
-View the [Sarcasm Creator sequence diagram](./diagrams/images/index.html#creator) to understand the data flow of this feature.
+**Sequence Diagram:**
+![Sarcasm Creator Sequence Diagram](./diagrams/images/Sarcasm%20Creator%20Sequence.png)
 
 #### How to Use the Sarcasm Creator
 
@@ -241,7 +242,8 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 The application includes a Sarcasm Voice Generator feature that transforms text into spoken sarcastic audio. This feature allows users to hear how their text would sound when spoken with a sarcastic tone.
 
-View the [Sarcasm Voice Generator sequence diagram](./diagrams/images/index.html#voice) to understand the data flow of this feature.
+**Sequence Diagram:**
+![Sarcasm Voice Sequence Diagram](./diagrams/images/Sarcasm%20Voice%20Sequence.png)
 
 #### How to Use the Sarcasm Voice Generator
 
