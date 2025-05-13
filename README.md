@@ -18,6 +18,17 @@ This application includes several AI-powered sarcasm features:
 
 These tools combine to create a comprehensive suite for understanding, creating, and vocalizing sarcastic communication.
 
+## Sequence Diagrams
+
+Each main feature has a corresponding sequence diagram that illustrates the data flow and component interactions:
+
+- [Voice Chat with Sarcasm Detection](./diagrams/images/index.html#voice-chat) - Visualizes how the chat interface interacts with Hume's API and processes sarcasm detection in real-time
+- [Sarcasm Detector](./diagrams/images/index.html#detector) - Shows the three detection pathways (text, webcam, audio) and their API interactions
+- [Sarcasm Creator](./diagrams/images/index.html#creator) - Illustrates the flow for generating sarcastic responses with custom parameters
+- [Sarcasm Voice Generator](./diagrams/images/index.html#voice) - Depicts the process of converting text to sarcastic speech
+
+View all diagrams in the [interactive diagram viewer](./diagrams/images/index.html).
+
 ### How It Works
 
 The sarcasm detection system operates by:
@@ -56,6 +67,8 @@ The sarcasm detection system operates by:
    - Contradiction between positive and negative emotions
 
 5. **Threshold application**: Sarcasm is reported to the user when the computed score exceeds a threshold value.
+
+View the [Voice Chat sequence diagram](./diagrams/images/index.html#voice-chat) to understand how sarcasm detection works within the conversation interface.
 
 ### Interactive Tooltip
 
@@ -118,6 +131,8 @@ In addition to the integrated sarcasm detection within the Empathic Voice Interf
 - **Facial expressions**: Analyze images captured from your webcam to identify facial cues associated with sarcasm
 - **Voice recordings**: Detect sarcasm in spoken language by analyzing speech patterns and transcribed content
 
+View the [Sarcasm Detector sequence diagram](./diagrams/images/index.html#detector) to understand the data flow of this feature.
+
 The standalone Sarcasm Detector offers:
 
 - An intuitive tabbed interface for different analysis methods
@@ -178,6 +193,8 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 The application now includes a Sarcasm Creator feature that allows users to generate sarcastic responses based on input text. This feature leverages advanced natural language processing models to craft responses that mimic human sarcasm.
 
+View the [Sarcasm Creator sequence diagram](./diagrams/images/index.html#creator) to understand the data flow of this feature.
+
 #### How to Use the Sarcasm Creator
 
 1. Navigate to the "Sarcasm Creator" page using the navigation bar.
@@ -223,6 +240,8 @@ OPENAI_API_KEY=your_openai_api_key_here
 ### Sarcasm Voice Generator
 
 The application includes a Sarcasm Voice Generator feature that transforms text into spoken sarcastic audio. This feature allows users to hear how their text would sound when spoken with a sarcastic tone.
+
+View the [Sarcasm Voice Generator sequence diagram](./diagrams/images/index.html#voice) to understand the data flow of this feature.
 
 #### How to Use the Sarcasm Voice Generator
 
