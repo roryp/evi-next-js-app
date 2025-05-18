@@ -304,7 +304,7 @@ HUME_SECRET_KEY=your_hume_secret_key_here
 1. Clone this repository:
    ```bash
    git clone <repository-url>
-   cd evi-next-js-app
+   cd sarcasm-app
    ```
 
 2. Install dependencies:
@@ -373,7 +373,7 @@ To build and run the Docker image locally, follow these steps:
      --secret id=openai_key,src=openai_api_key.txt \
      --secret id=hume_key,src=hume_api_key.txt \
      --secret id=hume_secret,src=hume_secret_key.txt \
-     -t evi-next-js-app .
+     -t sarcasm-app .
    ```
 
    On Windows PowerShell:
@@ -382,7 +382,7 @@ To build and run the Docker image locally, follow these steps:
      --secret id=openai_key,src=openai_api_key.txt `
      --secret id=hume_key,src=hume_api_key.txt `
      --secret id=hume_secret,src=hume_secret_key.txt `
-     -t evi-next-js-app .
+     -t sarcasm-app .
    ```
 
 2. **Run the Docker Container**:
@@ -393,7 +393,7 @@ To build and run the Docker image locally, follow these steps:
      -e OPENAI_API_KEY="$(cat openai_api_key.txt)" \
      -e HUME_API_KEY="$(cat hume_api_key.txt)" \
      -e HUME_SECRET_KEY="$(cat hume_secret_key.txt)" \
-     evi-next-js-app
+     sarcasm-app
    ```
 
    On Windows PowerShell:
@@ -402,7 +402,7 @@ To build and run the Docker image locally, follow these steps:
      -e OPENAI_API_KEY="$(Get-Content openai_api_key.txt)" `
      -e HUME_API_KEY="$(Get-Content hume_api_key.txt)" `
      -e HUME_SECRET_KEY="$(Get-Content hume_secret_key.txt)" `
-     evi-next-js-app
+     sarcasm-app
    ```
 
    This will start the Docker container and map port 3000 of the container to port 3000 on your local machine. You can then access the application at [http://localhost:3000](http://localhost:3000).
