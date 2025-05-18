@@ -5,9 +5,9 @@ set -e
 ACR_NAME="sarcasmvsrpza"
 RESOURCE_GROUP="sarcastic"
 LOCATION="eastus2"
-CONTAINER_APP_NAME="evi-next-js-app"
-CONTAINER_APP_ENV_NAME="evi-next-js-app-env"
-IMAGE_NAME="evi-next-js-app"
+CONTAINER_APP_NAME="sarcasm-vs-rpza"
+CONTAINER_APP_ENV_NAME="sarcasm-vs-rpza-env"
+IMAGE_NAME="sarcasm-vs-rpza"
 IMAGE_TAG="latest"
 
 # Read API keys from files
