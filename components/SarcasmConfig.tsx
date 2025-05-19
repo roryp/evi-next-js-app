@@ -30,73 +30,73 @@ export const defaultSarcasmParameters: SarcasmParameters = {
     "amusementContempt": { 
       name: "Amusement + Contempt", 
       weight: 0.2, 
-      enabled: true,
+      enabled: false,
       description: "Combines humor with disdain—strongly indicates sarcasm when the laughter or amusement masks scorn"
     },
     "exaggeratedPositive": { 
       name: "Exaggerated Positive Emotion", 
       weight: 0.2, 
-      enabled: true,
+      enabled: false,
       description: "Overstated positive signals (e.g., extreme joy or excitement) that contrast sharply with negative context"
     },
     "contrastingEmotions": { 
       name: "Contrasting Emotions", 
       weight: 0.3, 
-      enabled: true,
+      enabled: false,
       description: "Simultaneous expression of conflicting emotions is a key indicator of sarcastic intent"
     },
     "angerPositive": { 
       name: "Anger + Positive Emotion", 
       weight: 0.25, 
-      enabled: true,
+      enabled: false,
       description: "Indicates passive-aggressive sarcasm—positive language masking underlying frustration or anger"
     },
     "positiveNegativeUndertones": { 
       name: "Positive Emotion + Negative Undertones", 
       weight: 0.3, 
-      enabled: true,
+      enabled: false,
       description: "Surface-level enthusiasm that hides an underlying negative sentiment (e.g., false praise)"
     },
     "awkwardness": { 
       name: "Awkwardness", 
       weight: 0.15, 
-      enabled: true,
+      enabled: false,
       description: "High awkwardness often signals discomfort with saying something insincere"
     },
     "exaggeratedSingleEmotion": { 
       name: "Exaggerated Single Emotion", 
       weight: 0.15, 
-      enabled: true,
+      enabled: false,
       description: "One dominant emotion that's much stronger than others, suggesting possible exaggeration"
     },
     "emotionalComplexity": { 
       name: "Emotional Complexity", 
       weight: 0.1, 
-      enabled: true,
+      enabled: false,
       description: "Multiple different emotions detected at significant levels, suggesting complex intent"
     },
     "noDominantEmotion": { 
       name: "No Dominant Emotion", 
       weight: 0.1, 
-      enabled: true,
+      enabled: false,
       description: "Mixed or ambiguous emotional signals that may indicate masked sarcasm, but with less certainty"
     },
     "contemptDetected": { 
       name: "Contempt Detected", 
       weight: 0.2, 
-      enabled: true,
+      enabled: false,
       description: "Presence of contempt, which often signals sarcastic intent"
     },
     "realizationAmusement": { 
       name: "Realization + Amusement", 
       weight: 0.15, 
-      enabled: true,
+      enabled: false,
       description: "Combination indicating recognition of a contradiction or joke"
     },
     "emphaticSarcasm": { 
       name: "Emphatic Sarcasm", 
       weight: 0.15, 
-      enabled: true,
+      enabled: false,
       description: "High determination combined with misleading emotions suggesting deliberate sarcasm"
     }
   },

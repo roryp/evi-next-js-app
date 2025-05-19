@@ -2,7 +2,7 @@
 import { Hume } from "hume";
 import { expressionColors, isExpressionColor } from "@/utils/expressionColors";
 import { motion } from "framer-motion";
-import { CSSProperties, useState } from "react";
+import { CSSProperties, useState, useEffect } from "react";
 import * as R from "remeda";
 import { SarcasmParameters, defaultSarcasmParameters } from "./SarcasmConfig";
 
@@ -25,6 +25,69 @@ export default function Expressions({
 }) {
   const [showAllEmotions, setShowAllEmotions] = useState(false);
   const [showSarcasmTooltip, setShowSarcasmTooltip] = useState(false);
+  const [tooltipLocked, setTooltipLocked] = useState(false);
+  const [tooltipTimeout, setTooltipTimeout] = useState<NodeJS.Timeout | null>(null);
+  
+  // Function to handle tooltip hover
+  const handleTooltipHover = () => {
+    // Clear any existing timeout to prevent tooltip from closing prematurely
+    if (tooltipTimeout) {
+      clearTimeout(tooltipTimeout);
+      setTooltipTimeout(null);
+    }
+    
+    // Show tooltip if it's not already locked in place
+    if (!tooltipLocked) {
+      setShowSarcasmTooltip(true);
+    }
+  };
+  
+  // Function to handle tooltip mouse leave
+  const handleTooltipLeave = () => {
+    // Only hide tooltip if it's not locked
+    if (!tooltipLocked) {
+      // Set a timeout to hide the tooltip after a delay (3 seconds)
+      const timeout = setTimeout(() => {
+        setShowSarcasmTooltip(false);
+      }, 3000);
+      
+      setTooltipTimeout(timeout);
+    }
+  };
+  
+  // Function to toggle tooltip lock
+  const toggleTooltipLock = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent event from bubbling up
+    setTooltipLocked(!tooltipLocked);
+    setShowSarcasmTooltip(true);
+    
+    // Clear any existing timeout
+    if (tooltipTimeout) {
+      clearTimeout(tooltipTimeout);
+      setTooltipTimeout(null);
+    }
+  };
+  
+  // Function to close the tooltip
+  const closeTooltip = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent event from bubbling up
+    setShowSarcasmTooltip(false);
+    setTooltipLocked(false);
+    
+    // Clear any existing timeout
+    if (tooltipTimeout) {
+      clearTimeout(tooltipTimeout);
+      setTooltipTimeout(null);
+    }  };
+  
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (tooltipTimeout) {
+        clearTimeout(tooltipTimeout);
+      }
+    };
+  }, [tooltipTimeout]);
   
   if (!values) return null;
 
@@ -81,51 +144,17 @@ export default function Expressions({
     
     // Get all emotions and sort them by score (moved up from below)
     const allEmotions = R.values(scores);
-    const sortedScores = allEmotions.sort((a, b) => b - a);
-
-    // Single strong indicator can be enough to establish a base score
+    const sortedScores = allEmotions.sort((a, b) => b - a);    // Single strong indicator can be enough to establish a base score
     const strongIndicators = sarcasmIndicators
       .map((key) => scores[key] || 0)
       .filter((score) => score > strongIndicatorThreshold);
     
-    if (strongIndicators.length > 0 && sarcasmParameters.patternWeights["contemptDetected"].enabled) {
-      // Start with a base level of sarcasm if any strong indicator is present
-      const baseScore = baseThreshold + (strongIndicators[0] * 0.3);
-      sarcasmScore = baseScore;
-      
-      // Log contribution
-      contributions.push({
-        pattern: "Strong sarcasm indicator",
-        score: baseScore,
-        explanation: `Strong presence of sarcasm-related emotions: ${sarcasmIndicators
-          .filter(key => (scores[key] || 0) > 0.2)
-          .map(key => `${key} (${(scores[key] || 0).toFixed(2)})`)
-          .join(', ')}`
-      });
-    }
-
-    // If we have multiple indicators, enhance the score
+    // Removed "Strong presence of sarcasm-related emotions" pattern as requested
+    // This was causing false positives    // If we have multiple indicators, enhance the score
     if (indicatorScores.length >= 2) {
-      // Base score from indicator emotions
-      const indicatorBaseScore = Math.max(
-        0,
-        indicatorScores.reduce((sum, score) => sum + score, 0) / indicatorScores.length
-      );
+      // Removed "Multiple sarcasm indicators" pattern as requested
+      // This was causing false positives
       
-      if (indicatorBaseScore > sarcasmScore) {
-        sarcasmScore = indicatorBaseScore;
-        
-        // Log contribution
-        contributions.push({
-          pattern: "Multiple sarcasm indicators",
-          score: indicatorBaseScore,
-          explanation: `Multiple sarcasm-related emotions detected: ${sarcasmIndicators
-            .filter(key => (scores[key] || 0) > 0.07)
-            .map(key => `${key} (${(scores[key] || 0).toFixed(2)})`)
-            .join(', ')}`
-        });
-      }
-
       // Specific sarcasm patterns based on configured weights
       if (scores.amusement > 0.2 && scores.contempt > 0.1 && 
           sarcasmParameters.patternWeights["amusementContempt"].enabled) {
@@ -361,19 +390,21 @@ export default function Expressions({
   const hasHiddenEmotions = !showAllEmotions && (secondaryEmotions.length > 3 || minorEmotions.length > 0);
 
   return (
-    <div className="text-xs p-3 w-full border-t border-border flex flex-col gap-3">
-      {/* Sarcasm indicator display - now more prominent if detected */}
+    <div className="text-xs p-3 w-full border-t border-border flex flex-col gap-3">      {/* Sarcasm indicator display - now more prominent if detected */}
       {hasSarcasmIndicators && (
         <div
           className="w-full overflow-visible mb-1 p-3 rounded-md relative cursor-pointer"
           style={{ background: "rgba(158, 68, 196, 0.15)" }}
-          onMouseEnter={() => setShowSarcasmTooltip(true)}
-          onMouseLeave={() => setShowSarcasmTooltip(false)}
+          onMouseEnter={handleTooltipHover}
+          onMouseLeave={handleTooltipLeave}
+          onClick={toggleTooltipLock}
         >
           <div className="flex items-center justify-between gap-1 font-mono pb-2">
             <div className="font-bold text-sm flex items-center gap-1">
               Sarcasm Detected 👀
-              <span className="opacity-50 text-xs font-normal">(hover for details)</span>
+              <span className="opacity-50 text-xs font-normal">
+                {tooltipLocked ? "(pinned, click to unpin)" : "(hover or click to see details)"}
+              </span>
             </div>
             <div className="tabular-nums text-sm font-semibold">
               {(sarcasmScore * 100).toFixed(0)}%
@@ -392,9 +423,29 @@ export default function Expressions({
           
           {/* Tooltip for sarcasm details - fixed positioning and z-index */}
           {showSarcasmTooltip && (
-            <div className="absolute left-0 top-full mt-2 z-50 bg-black/90 backdrop-blur-sm rounded-md shadow-lg p-3 w-80 text-white/90"
-                 style={{ maxWidth: "calc(100vw - 2rem)" }}>
-              <h4 className="text-sm font-medium mb-2 pb-1 border-b border-white/20">Sarcasm Detection Factors</h4>
+            <div 
+              className="absolute left-0 top-full mt-2 z-50 bg-black/90 backdrop-blur-sm rounded-md shadow-lg p-3 w-80 text-white/90"
+              style={{ maxWidth: "calc(100vw - 2rem)" }}
+            >
+              <div className="flex justify-between items-center mb-2 pb-1 border-b border-white/20">
+                <h4 className="text-sm font-medium">Sarcasm Detection Factors</h4>
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={toggleTooltipLock}
+                    className="text-xs opacity-70 hover:opacity-100 cursor-pointer"
+                    title={tooltipLocked ? "Unpin tooltip" : "Pin tooltip to keep it visible"}
+                  >
+                    {tooltipLocked ? "📌" : "🔗"}
+                  </button>
+                  <button 
+                    onClick={closeTooltip}
+                    className="text-xs opacity-70 hover:opacity-100 cursor-pointer"
+                    title="Close tooltip"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
               <div className="max-h-60 overflow-y-auto">
                 {sarcasmContributions.map((contribution, index) => (
                   <div key={index} className="mb-2 pb-2 border-b border-white/10 last:border-0">
