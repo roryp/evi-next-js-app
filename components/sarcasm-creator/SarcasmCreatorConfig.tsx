@@ -28,63 +28,63 @@ export const defaultSarcasmCreatorParameters: SarcasmCreatorParameters = {
     "exaggeration": { 
       name: "Exaggeration", 
       weight: 0.7, 
-      enabled: true,
+      enabled: false,
       description: "Uses hyperbole and overstatement to emphasize the sarcastic point"
     },
     "fakeEnthusiasm": { 
       name: "Fake Enthusiasm", 
       weight: 0.8, 
-      enabled: true,
+      enabled: false,
       description: "Expresses excessive fake excitement or positivity about something negative"
     },
     "mockingRepetition": { 
       name: "Mocking Repetition", 
       weight: 0.4, 
-      enabled: true,
+      enabled: false,
       description: "Repeats or mimics part of the input text in a mocking tone"
     },
     "ironicUnderstatement": { 
       name: "Ironic Understatement", 
       weight: 0.6, 
-      enabled: true,
+      enabled: false,
       description: "Deliberately understates something significant for ironic effect"
     },
     "rhetoricalQuestions": { 
       name: "Rhetorical Questions", 
       weight: 0.5, 
-      enabled: true,
+      enabled: false,
       description: "Uses questions that emphasize the obvious sarcastic point"
     },
     "fakeCompliments": { 
       name: "Fake Compliments", 
       weight: 0.65, 
-      enabled: true,
+      enabled: false,
       description: "Offers insincere praise or congratulations"
     },
     "literalInterpretation": { 
       name: "Literal Interpretation", 
       weight: 0.45, 
-      enabled: true,
+      enabled: false,
       description: "Takes figurative language literally for comedic effect"
     },
     "absurdComparison": { 
       name: "Absurd Comparison", 
       weight: 0.55, 
-      enabled: true,
+      enabled: false,
       description: "Compares the situation to something ridiculous or extreme"
     },
     "dramaticPunctuation": { 
       name: "Dramatic Punctuation", 
       weight: 0.4, 
-      enabled: true,
+      enabled: false,
       description: "Uses excessive punctuation, ALL CAPS, or emphasis for effect"
     }
   },
   toneSettings: {
-    intensity: 0.7,     // How strong the sarcasm should be (0.0 to 1.0)
-    humor: 0.6,         // How funny vs serious (0.0 to 1.0)
-    harshness: 0.5,     // How gentle vs cutting (0.0 to 1.0)
-    subtlety: 0.4       // How obvious vs subtle (0.0 to 1.0)
+    intensity: 0.0,     // How strong the sarcasm should be (0.0 to 1.0)
+    humor: 0.0,         // How funny vs serious (0.0 to 1.0)
+    harshness: 0.0,     // How gentle vs cutting (0.0 to 1.0)
+    subtlety: 0.0       // How obvious vs subtle (0.0 to 1.0)
   }
 };
 

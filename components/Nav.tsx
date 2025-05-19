@@ -33,13 +33,6 @@ export const Nav = () => {
       }
     >
       <div className="flex items-center gap-1">
-        <Button
-          variant={pathname === "/" ? "default" : "ghost"}
-          size="sm"
-          asChild
-        >
-          <Link href="/">Voice Chat</Link>
-        </Button>
         
         <Button
           variant={pathname === "/sarcasm-detector" ? "default" : "ghost"}
@@ -51,7 +44,8 @@ export const Nav = () => {
             <Wand2 className="size-4" /> 
             Sarcasm Detector
           </Link>
-        </Button>        <Button
+        </Button>
+        <Button
           variant={pathname === "/sarcasm-creator" ? "default" : "ghost"}
           size="sm"
           asChild

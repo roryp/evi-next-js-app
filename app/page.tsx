@@ -1,20 +1,19 @@
-import { getHumeAccessToken } from "@/utils/getHumeAccessToken";
-import dynamic from "next/dynamic";
+"use client";
 
-const Chat = dynamic(() => import("@/components/Chat"), {
-  ssr: false,
-});
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-export default async function Page() {
-  const accessToken = await getHumeAccessToken();
-
-  if (!accessToken) {
-    throw new Error();
-  }
+export default function Page() {
+  const router = useRouter();
+  
+  useEffect(() => {
+    // Redirect users from the home page to the Sarcasm Detector page
+    router.replace("/sarcasm-detector");
+  }, [router]);
 
   return (
-    <div className={"grow flex flex-col"}>
-      <Chat accessToken={accessToken} />
+    <div className="flex items-center justify-center h-full">
+      <p>Redirecting...</p>
     </div>
   );
 }
