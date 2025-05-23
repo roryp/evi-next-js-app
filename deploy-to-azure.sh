@@ -2,12 +2,12 @@
 set -e
 
 # Variables - customize these
-ACR_NAME="sarcasmvsrpza"
-RESOURCE_GROUP="sarcastic"
+ACR_NAME="sarcasmrpza"
+RESOURCE_GROUP="sarcasticrpza-rg"
 LOCATION="eastus2"
-CONTAINER_APP_NAME="sarcasm-vs-rpza"
-CONTAINER_APP_ENV_NAME="sarcasm-vs-rpza-env"
-IMAGE_NAME="sarcasm-vs-rpza"
+CONTAINER_APP_NAME="sarcasm-rpza"
+CONTAINER_APP_ENV_NAME="sarcasm-rpza-env"
+IMAGE_NAME="sarcasm-rpza"
 IMAGE_TAG="latest"
 
 # Read API keys from files
